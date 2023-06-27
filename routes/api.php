@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Main\Actions\SearchRestaurantsAction;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/search', function(Request $request, SearchRestaurantsAction $action) {
+    $genre = $request->input('genre');
+    $large_area = $request->input('large_area');
+    $middle_area = $request->input('middle_area');
+
+    return $action->search($genre, $large_area, $middle_area);
 });
