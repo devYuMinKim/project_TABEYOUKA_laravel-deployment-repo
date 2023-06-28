@@ -1,11 +1,14 @@
 <?php
-// 주변 식당 확인 액션
-namespace App\Main\Actions;
+namespace App\Search\Actions;
 
-use App\Main\Domain\Restaurant;
+use App\Search\Domain\Restaurant;
 use App\Services\RecruitApiService;
-use App\Main\Responders\NearbyRestaurantsResponder;
+use App\Search\Responders\NearbyRestaurantsResponder;
 
+/**
+ * 주변 식당 확인 액션 클래스
+ * - 사용자 위치 기반 가게 검색 기능을 수행
+ */
 class FindNearbyRestaurantsAction
 {
   protected $recruitApiService;

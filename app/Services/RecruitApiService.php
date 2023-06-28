@@ -16,9 +16,10 @@ class RecruitApiService
   }
 
   /**
-   * 주변 식당 검색 메서드 (장르, 대형 지역, 중형 지역 선택 가능)
+   * 지역 코드를 기반으로 한 식당 검색 메서드
+   * - 장르, 대형 지역, 중형 지역, 검색 키워드 선택 가능
    */
-  public function searchRestaurantsByLocationCode(?string $genre = null, ?string $large_area = null, ?string $middle_area = null)
+  public function searchRestaurantsByLocationCode(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?string $keyword = null)
   {
     $params = [
       'key' => env('APP_KEY'),
@@ -28,13 +29,14 @@ class RecruitApiService
     if ($genre !== null) {
       $params['genre'] = $genre;
     }
-
     if ($large_area !== null) {
       $params['large_area'] = $large_area;
     }
-
     if ($middle_area !== null) {
       $params['middle_area'] = $middle_area;
+    }
+    if ($keyword !== null) {
+      $params['keyword'] = $keyword;
     }
 
     $response = $this->client->get('gourmet/v1/', [
@@ -50,6 +52,7 @@ class RecruitApiService
 
   /**
    * 가게명으로 검색 메서드
+   * - 입력된 가게명을 사용하여 검색 결과 반환
    */
   public function searchRestaurantsByName(string $name)
   {
@@ -82,7 +85,9 @@ class RecruitApiService
   }
 
   /**
-   * 사용자 위치기반 주변 식당 검색 메서드
+   * 사용자의 위치를 기반으로 한 주변 식당 검색 메서드
+   * - 위도, 경도에 기반하여 사용자 주변의 식당 검색이 가능
+   * - 검색 키워드 선택 가능
    */
   public function searchRestaurantsByUserLocation(float $latitude, float $longitude, float $range, ?string $keyword = null)
   {
