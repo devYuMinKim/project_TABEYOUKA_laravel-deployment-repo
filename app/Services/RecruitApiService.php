@@ -22,7 +22,7 @@ class RecruitApiService
   public function searchRestaurantsByLocationCode(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?string $keyword = null)
   {
     $params = [
-      'key' => env('APP_KEY'),
+      'key' => env('HOTPEPPER_KEY'),
       'format' => 'json',
     ];
 
@@ -57,7 +57,7 @@ class RecruitApiService
   public function searchRestaurantsByName(string $name)
   {
       $params = [
-          'key' => env('APP_KEY'),
+          'key' => env('HOTPEPPER_KEY'),
           'keyword' => $name,
           'format' => 'json',
       ];
@@ -92,7 +92,7 @@ class RecruitApiService
   public function searchRestaurantsByUserLocation(float $latitude, float $longitude, float $range, ?string $keyword = null)
   {
     $params = [
-      'key' => env('APP_KEY'),
+      'key' => env('HOTPEPPER_KEY'),
       'lat' => $latitude,
       'lng' => $longitude,
       'range' => $range,
