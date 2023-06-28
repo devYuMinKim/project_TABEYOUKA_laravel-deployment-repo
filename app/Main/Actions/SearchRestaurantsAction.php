@@ -16,7 +16,7 @@ class SearchRestaurantsAction
     $this->responder = $responder;
   }
 
-  public function search(?string $genre = null, ?string $large_area = null, ?string $middle_area = null) {
+  public function __invoke(?string $genre = null, ?string $large_area = null, ?string $middle_area = null) {
     $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $large_area, $middle_area);
     return $this->responder->respond($results);
   }
