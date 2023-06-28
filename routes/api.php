@@ -38,7 +38,20 @@ Route::get('/search/nby', function (Request $request, FindNearbyRestaurantsActio
 
     return $action($lat, $lng, $range);
 });
+ 
+/**
+ * 가게명으로 검색 기능
+ */
+Route::get('/search/name', function (Request $request, \App\Services\RecruitApiService $recruitApiService) {
+    $name = $request->input('name');
 
-// TODO: 검색 메서드(가게명)
-// TODO: 사용자 위치 기반으로 가게 추천
+    if ($name) {
+        $response = $recruitApiService->searchRestaurantsByName($name);
+    } else {
+        $response = null;
+    }
+
+    return response()->json($response);
+});
+
 // TODO: 사용자 성향에 따른 가게 추천
