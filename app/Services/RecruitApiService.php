@@ -16,7 +16,7 @@ class RecruitApiService
   }
 
   /**
-   * 주변 식당 검색 메서드 (장르, 대형 지역, 중 지역 선택 가능)
+   * 주변 식당 검색 메서드 (장르, 대형 지역, 중형 지역 선택 가능)
    */
   public function searchRestaurantsByLocationCode(?string $genre = null, ?string $large_area = null, ?string $middle_area = null)
   {
@@ -49,25 +49,36 @@ class RecruitApiService
   }
 
   /**
-   * FIXME: 가게명으로 검색 메서드
+   * 가게명으로 검색 메서드
    */
-  public function searchRestaurantsByKeyword(string $keyword)
+  public function searchRestaurantsByName(string $name)
   {
-    $params = [
-      'key' => env('APP_KEY'),
-      'name' => $name,
-      'format' => 'json',
-    ];
+      $params = [
+          'key' => env('APP_KEY'),
+          'keyword' => $name,
+          'format' => 'json',
+      ];
 
-    // $response = $this->client->get('shop/v1/', [
-    //   'query' => $params
-    // ]);
+      if (empty($name)) {
+        return null;
+      }
 
-    // if ($response->getStatusCode() === 200) {
-    //   return json_decode($response->getBody(), true)['results'];
-    // }
-
-    // return null;
+      try {
+        $response = $this->client->get('gourmet/v1/', [
+          'query' => $params
+        ]);
+  
+        if ($response->getStatusCode() === 200) {
+          return json_decode($response->getBody(), true)['results'];
+        }
+      } catch (\GuzzleHttp\Exception\RequestException $e) {
+        return response()->json([
+          'message' => 'Request failed',
+          'error' => $e->getMessage()
+        ], 400);
+      }
+  
+      return null;
   }
 
   /**

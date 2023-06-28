@@ -20,7 +20,6 @@ class FindNearbyRestaurantsAction
   public function __invoke(float $latitude, float $longitude, float $range, ?string $keyword = null)
   {
     $restaurants = $this->recruitApiService->searchRestaurantsByUserLocation($latitude, $longitude, $range, $keyword);
-
     return $this->responder->respond($restaurants);
   }
 }
