@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\DB;
 
 class UserGenrePreference
 {
+    /**
+     * 사용자 성향에 따른 장르를 가져오는 메서드
+     * - 최댓값이 동일한 자을가 있을 경우 랜덤 선택
+     * - 모든 값이 0일 경우 랜덤 장르 선택
+     */
     public static function getUserPreferredGenre(string $user_id): ?string
     {
         $genres = [];
