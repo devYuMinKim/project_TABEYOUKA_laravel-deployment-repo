@@ -4,10 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Search\Actions\SearchRestaurantsAction;
 use App\Search\Actions\FindNearbyRestaurantsAction;
-use App\Auth\Actions\LoginAction;
-use App\Auth\Actions\SignoutAction;
-use App\Profile\Actions\UserUpdateAction;
-use App\Profile\Actions\UserShowAction;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,9 +43,3 @@ Route::get('/search/nby', function (Request $request, FindNearbyRestaurantsActio
 });
 
 // TODO: 사용자 성향에 따른 가게 추천
-
-// 사용자에 관련된 api
-Route::post('/user', [LoginAction::class, 'store']);
-Route::patch('/user', [UserUpdateAction::class, 'update']);
-Route::get('/user/{id}', [UserShowAction::class, 'getUserById']);
-Route::delete('/user/{id}', [SignoutAction::class, 'getUserById']);
