@@ -26,5 +26,4 @@ class CreateRestaurantDomain
 
     return $this->responder->respond($result);
   }
-
 }

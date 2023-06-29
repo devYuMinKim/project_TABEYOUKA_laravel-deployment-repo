@@ -29,14 +29,8 @@ class CreateReviewAction
       return response()->json($errors, 422);
     }
 
-    $review = $request->only([
-      'content',
-      'score',
-      'restaurant_id',
-      'user_id',
-    ]);
+    $review = $request->only(['content', 'score', 'restaurant_id', 'user_id']);
 
     return $this->domain->createReview($review);
   }
-
 }

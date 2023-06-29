@@ -22,13 +22,13 @@ class CreateReviewDomain
 
   public function createReview(array $review)
   {
-    $restaurant_id = $review["restaurant_id"];
+    $restaurant_id = $review['restaurant_id'];
     $restaurant = Restaurant::find($restaurant_id);
 
     // 만약 해당 식당이 없다면, 식당을 생성한다.
     if (!$restaurant) {
       $this->createRestaurantDomain->createRestaurant([
-        "id" => $restaurant_id,
+        'id' => $restaurant_id,
       ]);
     }
 

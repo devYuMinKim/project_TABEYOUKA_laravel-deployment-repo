@@ -27,10 +27,7 @@ class CreateRestaurantAction
       return response()->json($errors, 422);
     }
 
-    $restaurant = $request->only([
-      'id',
-      'score',
-    ]);
+    $restaurant = $request->only(['id', 'score']);
 
     return $this->domain->createRestaurant($restaurant);
   }
