@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Search\Actions;
 
 use App\Search\Domain\Restaurant;
 use App\Services\RecruitApiService;
-use App\Search\Responders\NearbyRestaurantsResponder;
+use App\Search\Responders\FindNearbyRestaurantsResponder;
 
 /**
  * 주변 식당 확인 액션 클래스
@@ -14,7 +15,7 @@ class FindNearbyRestaurantsAction
   protected $recruitApiService;
   protected $responder;
 
-  public function __construct(RecruitApiService $recruitApiService, NearbyRestaurantsResponder $responder)
+  public function __construct(RecruitApiService $recruitApiService, FindNearbyRestaurantsResponder $responder)
   {
     $this->recruitApiService = $recruitApiService;
     $this->responder = $responder;
@@ -23,6 +24,6 @@ class FindNearbyRestaurantsAction
   public function __invoke(float $latitude, float $longitude, float $range, ?string $keyword = null)
   {
     $restaurants = $this->recruitApiService->searchRestaurantsByUserLocation($latitude, $longitude, $range, $keyword);
-    return $this->responder->respond($restaurants);
+    return $this->responder->__invoke($restaurants);
   }
 }
