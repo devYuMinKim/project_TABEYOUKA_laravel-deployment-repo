@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_genre_preferences', function (Blueprint $table) {
             $table->string('user_id', 255)->primary();
             for ($i = 1 ; $i <= 17 ; $i++) {
-                $table->integer('g' . str_pad($i, 3, '0', STR_PAD_LEFT))->nullable();
+                $table->integer('G' . str_pad($i, 3, '0', STR_PAD_LEFT))->default(0);
             }
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

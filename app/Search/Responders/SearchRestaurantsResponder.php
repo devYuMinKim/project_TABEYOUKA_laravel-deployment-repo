@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Search\Responders;
 
 /**
@@ -7,8 +8,8 @@ namespace App\Search\Responders;
  */
 class SearchRestaurantsResponder
 {
-  public function respond($restaurants)
+  public function __invoke($result)
   {
-    return response()->json($restaurants);
+      return response()->json($result);
   }
 }

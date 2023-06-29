@@ -22,7 +22,7 @@ class RecruitApiService
   public function searchRestaurantsByLocationCode(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?string $keyword = null)
   {
     $params = [
-      'key' => env('APP_KEY'),
+      'key' => env('HOTPEPPER_KEY'),
       'format' => 'json',
     ];
 
@@ -57,7 +57,7 @@ class RecruitApiService
   public function searchRestaurantsByName(string $name)
   {
       $params = [
-          'key' => env('APP_KEY'),
+          'key' => env('HOTPEPPER_KEY'),
           'keyword' => $name,
           'format' => 'json',
       ];
@@ -92,7 +92,7 @@ class RecruitApiService
   public function searchRestaurantsByUserLocation(float $latitude, float $longitude, float $range, ?string $keyword = null)
   {
     $params = [
-      'key' => env('APP_KEY'),
+      'key' => env('HOTPEPPER_KEY'),
       'lat' => $latitude,
       'lng' => $longitude,
       'range' => $range,
@@ -103,6 +103,36 @@ class RecruitApiService
     if ($keyword !== null) {
       $params['keyword'] = $keyword;
     }
+
+    $response = $this->client->get('gourmet/v1/', [
+      'query' => $params
+    ]);
+
+    if ($response->getStatusCode() === 200) {
+      return json_decode($response->getBody(), true)['results'];
+    }
+
+    return null;
+  }
+
+  /**
+   * 일치하는 장르의 인기 있는 가게를 가져오는 메서드
+   */
+  public function getPopularRestaurantsByGenre(?string $genre = null)
+  {
+    if ($genre === null) {
+      $genreArray = range(1, 17);
+      shuffle($genreArray);
+      $randomGenre = array_shift($genreArray);  // 랜덤한 장르 코드 선택
+      $genre = 'G' . str_pad($randomGenre, 3, '0', STR_PAD_LEFT); 
+    }
+
+    $params = [
+      'key' => env('HOTPEPPER_KEY'),
+      'format' => 'json',
+      'genre' => $genre,
+      'order' => 4, // 인기순 정렬
+    ];
 
     $response = $this->client->get('gourmet/v1/', [
       'query' => $params
