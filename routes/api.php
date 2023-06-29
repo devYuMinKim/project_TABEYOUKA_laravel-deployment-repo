@@ -1,5 +1,9 @@
 <?php
 
+use App\Auth\Actions\SignoutAction;
+use App\Profile\Actions\UserShowAction;
+use App\Profile\Actions\UserUpdateAction;
+use App\Auth\Actions\LoginAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Search\Actions\SearchRestaurantsAction;
@@ -9,6 +13,7 @@ use App\Search\Responders\SearchRestaurantsResponder;
 use App\Search\Responders\FindNearbyRestaurantsResponder;
 use App\Recommendation\Responders\RecommendRestaurantsResponder;
 use App\Services\RecruitApiService;
+use Monolog\Handler\RotatingFileHandler;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -55,3 +60,8 @@ Route::get('/recommend/{user_id}', function (
     $restaurants = $action($user_id, $recruitApiService);
     return $responder($restaurants);
 });
+
+Route::post('/user',[LoginAction::class,  'store']);
+Route::get('/user/{id}',[UserShowAction::class, 'getUserById']);
+Route::patch('/user', [UserUpdateAction::class, 'update']);
+Route::delete('/user/{id}', [SignoutAction::class, 'getUserById']);
