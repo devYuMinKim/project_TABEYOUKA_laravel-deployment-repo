@@ -11,7 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     DB::unprepared('
-      CREATE TRIGGER update_like_count_after_insert AFTER INSERT ON likes
+      CREATE TRIGGER update_review_like_count_after_insert AFTER INSERT ON likes
       FOR EACH ROW
       BEGIN
         UPDATE reviews
@@ -22,7 +22,7 @@ return new class extends Migration {
       END
     ');
     DB::unprepared('
-      CREATE TRIGGER update_like_count_after_delete AFTER DELETE ON likes
+      CREATE TRIGGER update_review_like_count_after_delete AFTER DELETE ON likes
       FOR EACH ROW
       BEGIN
         UPDATE reviews
@@ -39,7 +39,11 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    DB::unprepared('DROP TRIGGER IF EXISTS update_like_count_after_insert');
-    DB::unprepared('DROP TRIGGER IF EXISTS update_like_count_after_delete');
+    DB::unprepared(
+      'DROP TRIGGER IF EXISTS update_review_like_count_after_insert'
+    );
+    DB::unprepared(
+      'DROP TRIGGER IF EXISTS update_review_like_count_after_delete'
+    );
   }
 };
