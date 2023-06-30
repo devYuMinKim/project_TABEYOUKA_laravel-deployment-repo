@@ -1,5 +1,9 @@
 <?php
 
+use App\Auth\Actions\SignoutAction;
+use App\Profile\Actions\UserShowAction;
+use App\Profile\Actions\UserUpdateAction;
+use App\Auth\Actions\LoginAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Search\Actions\SearchRestaurantsAction;
@@ -77,3 +81,8 @@ Route::post('/review/like', LikeReviewAction::class);
  * 가게 생성 기능
  */
 Route::post('/restaurant', CreateRestaurantAction::class);
+
+Route::post('/user', [LoginAction::class, 'store']);
+Route::get('/user/{id}', [UserShowAction::class, 'getUserById']);
+Route::patch('/user', [UserUpdateAction::class, 'update']);
+Route::delete('/user/{id}', [SignoutAction::class, 'getUserById']);
