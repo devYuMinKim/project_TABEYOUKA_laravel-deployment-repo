@@ -10,6 +10,7 @@ use App\Search\Responders\FindNearbyRestaurantsResponder;
 use App\Recommendation\Responders\RecommendRestaurantsResponder;
 use App\Services\RecruitApiService;
 use App\Restaurant\Actions\CreateRestaurantAction;
+use App\Review\Actions\GetReviewsAction;
 use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\LikeReviewAction;
 
@@ -59,6 +60,8 @@ Route::get('/recommend/{user_id}', function (
   $restaurants = $action($user_id, $recruitApiService);
   return $responder($restaurants);
 });
+
+Route::get('/review', GetReviewsAction::class);
 
 /**
  * 가게 리뷰 생성 기능

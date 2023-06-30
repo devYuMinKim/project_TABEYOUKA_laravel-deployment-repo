@@ -32,7 +32,7 @@ class CreateReviewDomain
       ]);
     }
 
-    $result = new Review($review);
+    $result = new Review([...$review, 'like' => 0]);
 
     $result->save();
 

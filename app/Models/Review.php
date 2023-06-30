@@ -17,6 +17,7 @@ class Review extends Model
     'id',
     'content',
     'score',
+    'like',
     'restaurant_id',
     'user_id',
     'created_at',
