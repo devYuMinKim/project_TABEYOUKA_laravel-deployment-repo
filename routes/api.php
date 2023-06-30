@@ -60,26 +60,26 @@ Route::get('/search/nby', function (
  * 사용자 성향에 따른 가게 추천 기능
  */
 
-Route::get("/recommend/{user_id}", function (
-    string $user_id,
-    RecruitApiService $recruitApiService,
-    RecommendRestaurantsAction $action,
-    RecommendRestaurantsResponder $responder
+Route::get('/recommend/{user_id}', function (
+  string $user_id,
+  RecruitApiService $recruitApiService,
+  RecommendRestaurantsAction $action,
+  RecommendRestaurantsResponder $responder
 ) {
-    $restaurants = $action($user_id, $recruitApiService);
-    return $responder($restaurants);
+  $restaurants = $action($user_id, $recruitApiService);
+  return $responder($restaurants);
 });
 
 /**
  * 가게 아이디로 가게 정보 찾기 기능
  */
-Route::get("/restaurant/{id}", function (
-    string $id,
-    FindRestaurantByIdAction $action,
-    FindRestaurantByIdResponder $responder
+Route::get('/restaurant/{id}', function (
+  string $id,
+  FindRestaurantByIdAction $action,
+  FindRestaurantByIdResponder $responder
 ) {
-    $restaurant = $action($id);
-    return $responder($restaurant);
+  $restaurant = $action($id);
+  return $responder($restaurant);
 });
 
 Route::get('/review', GetReviewsAction::class);
@@ -99,7 +99,10 @@ Route::post('/review/like', LikeReviewAction::class);
  */
 Route::post('/restaurant', CreateRestaurantAction::class);
 
-Route::post('/user', [LoginAction::class, 'store']);
-Route::get('/user/{id}', [UserShowAction::class, 'getUserById']);
-Route::patch('/user', [UserUpdateAction::class, 'update']);
-Route::delete('/user/{id}', [SignoutAction::class, 'getUserById']);
+/**
+ * 사용자 관련 기능
+ */
+Route::post('/user', LoginAction::class);
+Route::get('/user', UserShowAction::class);
+Route::patch('/user', UserUpdateAction::class);
+Route::delete('/user', SignoutAction::class);
