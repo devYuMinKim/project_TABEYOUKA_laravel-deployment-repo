@@ -3,16 +3,19 @@
 namespace App\Review\Actions;
 
 use Illuminate\Http\Request;
-use App\Review\Domain\CreateReviewDomain;
 use Illuminate\Validation\ValidationException;
+use App\Review\Domain\Review;
+use App\Review\Responders\CreateReviewResponder;
 
 class CreateReviewAction
 {
   protected $domain;
+  protected $responder;
 
-  public function __construct(CreateReviewDomain $domain)
+  public function __construct(Review $domain, CreateReviewResponder $responder)
   {
     $this->domain = $domain;
+    $this->responder = $responder;
   }
 
   public function __invoke(Request $request)
@@ -31,6 +34,8 @@ class CreateReviewAction
 
     $review = $request->only(['content', 'score', 'restaurant_id', 'user_id']);
 
-    return $this->domain->createReview($review);
+    $reponse = $this->domain->createReview($review);
+
+    return $this->responder->respond($reponse);
   }
 }

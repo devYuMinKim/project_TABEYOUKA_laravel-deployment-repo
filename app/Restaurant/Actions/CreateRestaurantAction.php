@@ -3,16 +3,21 @@
 namespace App\Restaurant\Actions;
 
 use Illuminate\Http\Request;
-use App\Restaurant\Domain\CreateRestaurantDomain;
 use Illuminate\Validation\ValidationException;
+use App\Restaurant\Domain\Restaurant;
+use App\Restaurant\Responders\CreateRestaurantResponder;
 
 class CreateRestaurantAction
 {
   protected $domain;
+  protected $responder;
 
-  public function __construct(CreateRestaurantDomain $domain)
-  {
+  public function __construct(
+    Restaurant $domain,
+    CreateRestaurantResponder $responder
+  ) {
     $this->domain = $domain;
+    $this->responder = $responder;
   }
 
   public function __invoke(Request $request)
@@ -29,6 +34,8 @@ class CreateRestaurantAction
 
     $restaurant = $request->only(['id', 'score']);
 
-    return $this->domain->createRestaurant($restaurant);
+    $response = $this->domain->createRestaurant($restaurant);
+
+    return $this->responder->respond($response);
   }
 }

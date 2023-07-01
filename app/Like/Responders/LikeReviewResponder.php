@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Review\Responders;
+namespace App\Like\Responders;
 
 class LikeReviewResponder
 {

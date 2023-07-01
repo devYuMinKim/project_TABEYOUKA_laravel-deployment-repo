@@ -1,17 +1,21 @@
 <?php
 
-namespace App\Review\Actions;
+namespace App\Like\Actions;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Review\Domain\LikeReviewDomain;
+use App\Like\Domain\Like;
+use App\Like\Responders\LikeReviewResponder;
 
 class LikeReviewAction
 {
   protected $domain;
-  public function __construct(LikeReviewDomain $domain)
+  protected $responder;
+
+  public function __construct(Like $domain, LikeReviewResponder $responder)
   {
     $this->domain = $domain;
+    $this->responder = $responder;
   }
 
   public function __invoke(Request $request)
@@ -28,6 +32,8 @@ class LikeReviewAction
 
     $review = $request->only(['review_id', 'user_id']);
 
-    return $this->domain->likeReview($review);
+    $response = $this->domain->likeReview($review);
+
+    return $this->responder->respond($response);
   }
 }

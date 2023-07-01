@@ -18,7 +18,7 @@ use App\Services\RecruitApiService;
 use App\Restaurant\Actions\CreateRestaurantAction;
 use App\Review\Actions\GetReviewsAction;
 use App\Review\Actions\CreateReviewAction;
-use App\Review\Actions\LikeReviewAction;
+use App\Like\Actions\LikeReviewAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -82,21 +82,23 @@ Route::get('/restaurant/{id}', function (
   return $responder($restaurant);
 });
 
-Route::get('/review', GetReviewsAction::class);
 
 /**
- * 가게 리뷰 생성 기능
+ * 리뷰 기능
  */
-Route::post('/review', CreateReviewAction::class);
+// 리뷰 조회
+Route::get('/review', GetReviewsAction::class); 
+
+// 리뷰 생성
+Route::post('/review', CreateReviewAction::class); 
+
+// 리뷰 공감
+Route::post('/review/like', LikeReviewAction::class); 
 
 /**
- * 리뷰 공감 기능
+ * 가게 기능
  */
-Route::post('/review/like', LikeReviewAction::class);
-
-/**
- * 가게 생성 기능
- */
+// 가게 생성
 Route::post('/restaurant', CreateRestaurantAction::class);
 
 /**
