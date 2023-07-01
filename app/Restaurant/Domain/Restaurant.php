@@ -29,7 +29,7 @@ class Restaurant extends Model
       return response()->json(['message' => '이미 식당이 존재합니다.'], 422);
     }
 
-    $result = self::create($restaurant);
+    $result = self::create([...$restaurant, 'score' => 0]);
 
     return $result;
   }
