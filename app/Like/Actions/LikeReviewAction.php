@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Restaurant\Actions;
+namespace App\Like\Actions;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Restaurant\Domain\Restaurant;
-use App\Restaurant\Responders\CreateRestaurantResponder;
+use App\Like\Domain\Like;
+use App\Like\Responders\LikeReviewResponder;
 
-class CreateRestaurantAction
+class LikeReviewAction
 {
   protected $domain;
   protected $responder;
 
-  public function __construct(
-    Restaurant $domain,
-    CreateRestaurantResponder $responder
-  ) {
+  public function __construct(Like $domain, LikeReviewResponder $responder)
+  {
     $this->domain = $domain;
     $this->responder = $responder;
   }
@@ -24,17 +22,17 @@ class CreateRestaurantAction
   {
     try {
       $request->validate([
-        'id' => 'required|integer',
-        'score' => 'integer',
+        'review_id' => 'required|integer',
+        'user_id' => 'required|string',
       ]);
     } catch (ValidationException $e) {
       $errors = $e->errors();
       return response()->json($errors, 422);
     }
 
-    $restaurant = $request->only(['id', 'score']);
+    $review = $request->only(['review_id', 'user_id']);
 
-    $response = $this->domain->createRestaurant($restaurant);
+    $response = $this->domain->likeReview($review);
 
     return $this->responder->respond($response);
   }
