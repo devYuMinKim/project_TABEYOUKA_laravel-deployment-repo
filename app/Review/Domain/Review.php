@@ -54,7 +54,7 @@ class Review extends Model
 
     // 만약 해당 식당이 없다면, 식당을 생성한다.
     if (!$restaurant) {
-      Restaurant::createRestaurant([
+      Restaurant::create([
         'id' => $restaurant_id,
       ]);
     }
