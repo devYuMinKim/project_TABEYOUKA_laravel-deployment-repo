@@ -2,7 +2,7 @@
 
 namespace App\Search\Actions;
 
-use App\Search\Domain\Restaurant;
+use App\Search\Domain\Repositories\RestaurantRepository;
 use App\Services\RecruitApiService;
 use App\Search\Responders\FindNearbyRestaurantsResponder;
 
