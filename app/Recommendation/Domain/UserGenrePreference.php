@@ -13,6 +13,11 @@ class UserGenrePreference
      */
     public static function getUserPreferredGenre(string $user_id): ?string
     {
+        // 인자 검증
+        if (empty($user_id)) {
+            throw new \InvalidArgumentException('User ID cannot be empty');
+        }
+        
         $genres = [];
         $maxCount = -1;
 
@@ -36,6 +41,12 @@ class UserGenrePreference
             return $genreColumn;
         }
 
-        return $genres[array_rand($genres)];
+        // array_rand() 실패한 경우 처리 추가
+        $genreIndex = array_rand($genres);
+        if ($genreIndex === false) {
+            throw new \RuntimeException('An error occurred while selecting a random genre');
+        }
+
+        return $genres[$genreIndex];
     }
 }

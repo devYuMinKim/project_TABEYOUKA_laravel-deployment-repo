@@ -12,10 +12,14 @@ class RecommendRestaurantsAction
    */
   public function __invoke(string $user_id, RecruitApiService $recruitApiService)
   {
-    $preferred_genre = UserGenrePreference::getUserPreferredGenre($user_id);
+    try {
+      $preferred_genre = UserGenrePreference::getUserPreferredGenre($user_id);
 
-    // 선호하는 장르를 기반으로 인기 있는 가게를 검색하거나 랜덤으로 인기 있는 가게를 검색
-    $restaurants = $recruitApiService->getPopularRestaurantsByGenre($preferred_genre);
+      // 선호하는 장르를 기반으로 인기 있는 가게를 검색하거나 랜덤으로 인기 있는 가게를 검색
+      $restaurants = $recruitApiService->getPopularRestaurantsByGenre($preferred_genre);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+    }
 
     return $restaurants;
   }
