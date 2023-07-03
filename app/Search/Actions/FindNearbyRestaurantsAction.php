@@ -29,6 +29,6 @@ class FindNearbyRestaurantsAction
       return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
     }
     
-    return $this->responder->__invoke($restaurants);
+    return $this->responder($restaurants);
   }
 }
