@@ -4,6 +4,7 @@ namespace App\Recommendation\Actions;
 
 use App\Services\RecruitApiService;
 use App\Recommendation\Domain\Repositories\UserGenrePreferenceRepository;
+use App\Recommendation\Responders\RecommendRestaurantsResponder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Exception;
@@ -15,6 +16,7 @@ class RecommendRestaurantsAction
 {
     protected $userGenrePreferenceRepository;
     protected $recruitApiService;
+    protected $responder;
 
     /**
      * RecommendRestaurantsAction 인스턴스 생성
@@ -22,10 +24,11 @@ class RecommendRestaurantsAction
      * @param  UserGenrePreferenceRepository  $userGenrePreferenceRepository
      * @param  RecruitApiService  $recruitApiService
      */
-    public function __construct(UserGenrePreferenceRepository $userGenrePreferenceRepository, RecruitApiService $recruitApiService)
+    public function __construct(UserGenrePreferenceRepository $userGenrePreferenceRepository, RecruitApiService $recruitApiService, RecommendRestaurantsResponder $responder)
     {
         $this->userGenrePreferenceRepository = $userGenrePreferenceRepository;
         $this->recruitApiService = $recruitApiService;
+        $this->responder = $responder;
     }
 
     /**
@@ -55,6 +58,6 @@ class RecommendRestaurantsAction
             return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
         }
 
-        return response()->json($restaurants);
+        return $this->responder->__invoke($restaurants);
     }
 }
