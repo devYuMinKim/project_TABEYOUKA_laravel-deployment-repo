@@ -13,9 +13,6 @@ class AppServiceProvider extends ServiceProvider
             \App\Restaurant\Domain\Repositories\RestaurantRepositoryInterface::class,
             \App\Restaurant\Domain\Repositories\HotpepperRestaurantRepository::class
         );
-        $this->app->bind(RestaurantRepository::class, function ($app) {
-            return new RestaurantRepository();
-        });
     }
 
     public function boot(): void
