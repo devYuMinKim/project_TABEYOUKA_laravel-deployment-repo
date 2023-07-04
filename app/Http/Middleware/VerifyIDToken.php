@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
-use App\Auth\Domains\Users;
+use App\Profile\Domains\Entities\Users;
 use GuzzleHttp\Exception\RequestException;
 
 class VerifyIDToken
@@ -18,7 +18,7 @@ class VerifyIDToken
 
     try {
       $client = new Client();
-
+      // token에 대한 유효성을 검증하고 그에 대한 정보를 반환
       $response = $client->get('https://oauth2.googleapis.com/tokeninfo', [
         'query' => [
           'id_token' => $idToken, // 구글에서 받은 idToken
@@ -33,7 +33,10 @@ class VerifyIDToken
         $request->merge(['id' => $data['email']]);
         $user = Users::where('id', $request->id)->exists();
         if ($user) {
-          return response()->json(['message' => 'User logged in successfully']);
+          return response()->json(
+            ['message' => 'User logged in successfully'],
+            200
+          );
         }
         return $next($request);
       } else {
@@ -45,7 +48,7 @@ class VerifyIDToken
         );
       }
     } catch (RequestException $e) {
-      return response()->$e;
+      return response($e, 500);
     }
   }
 }
