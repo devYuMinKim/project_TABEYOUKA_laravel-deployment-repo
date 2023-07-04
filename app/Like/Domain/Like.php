@@ -41,4 +41,23 @@ class Like extends Model
 
     return $result;
   }
+
+  public function unLikeReview(array $review)
+  {
+    $like = self::where('review_id', $review['review_id'])->where(
+      'user_id',
+      $review['user_id']
+    );
+
+    if (!$like) {
+      return response()->json(
+        ['message' => '좋아요가 존재하지 않습니다.'],
+        422
+      );
+    }
+
+    $result = $like->delete();
+
+    return $result;
+  }
 }
