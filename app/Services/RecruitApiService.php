@@ -50,12 +50,22 @@ class RecruitApiService
             }
         }
 
-        $response = $this->client->get("gourmet/v1/", [
-            "query" => $params,
-        ]);
-
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response->getBody(), true)["results"];
+        try {
+            $response = $this->client->get("gourmet/v1/", [
+                "query" => $params,
+            ]);
+    
+            if ($response->getStatusCode() === 200) {
+                return json_decode($response->getBody(), true)["results"];
+            }
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return response()->json(
+                [
+                    "message" => "Request failed",
+                    "error" => $e->getMessage(),
+                ],
+                400
+            );
         }
 
         return null;

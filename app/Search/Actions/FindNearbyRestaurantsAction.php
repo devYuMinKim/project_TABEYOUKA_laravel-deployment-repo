@@ -2,7 +2,7 @@
 
 namespace App\Search\Actions;
 
-use App\Search\Domain\Restaurant;
+use App\Search\Domain\Repositories\RestaurantRepository;
 use App\Services\RecruitApiService;
 use App\Search\Responders\FindNearbyRestaurantsResponder;
 
@@ -29,6 +29,6 @@ class FindNearbyRestaurantsAction
       return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
     }
     
-    return $this->responder->__invoke($restaurants);
+    return $this->responder($restaurants);
   }
 }

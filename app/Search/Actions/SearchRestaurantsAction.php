@@ -27,6 +27,6 @@ class SearchRestaurantsAction
       return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
     }
 
-    return $this->responder->__invoke($results);
+    return $this->responder($results);
   }
 }
