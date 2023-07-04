@@ -33,6 +33,13 @@ class Review extends Model
     return $this->belongsTo(Restaurant::class);
   }
 
+  public function getReviewById($id)
+  {
+    $review = self::find($id);
+
+    return $review;
+  }
+
   /**
    * Get all reviews
    */
@@ -50,10 +57,10 @@ class Review extends Model
   {
     $restaurant_id = $review['restaurant_id'];
 
-    $restaurant = Restaurant::find($restaurant_id);
+    $isExist = Restaurant::find($restaurant_id);
 
     // 만약 해당 식당이 없다면, 식당을 생성한다.
-    if (!$restaurant) {
+    if (!$isExist) {
       Restaurant::create([
         'id' => $restaurant_id,
       ]);
