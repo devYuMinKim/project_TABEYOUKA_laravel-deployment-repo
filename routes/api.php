@@ -31,12 +31,17 @@ Route::get('/search', function (
   SearchRestaurantsAction $action,
   SearchRestaurantsResponder $responder
 ) {
-  $genre = $request->input('genre');
-  $large_area = $request->input('large_area');
-  $middle_area = $request->input('middle_area');
-  $keyword = $request->input('name');
+  try {
+    $genre = $request->input('genre');
+    $large_area = $request->input('large_area');
+    $middle_area = $request->input('middle_area');
+    $keyword = $request->input('name');
 
-  $result = $action($genre, $large_area, $middle_area, $keyword);
+    $result = $action($genre, $large_area, $middle_area, $keyword);
+  } catch (\Exception $e) {
+    return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+  }
+  
   return $responder($result);
 });
 

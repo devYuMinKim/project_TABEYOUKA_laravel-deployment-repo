@@ -43,12 +43,29 @@ class RecruitApiService
             $params["keyword"] = $keyword;
         }
 
-        $response = $this->client->get("gourmet/v1/", [
-            "query" => $params,
-        ]);
+        $input_keys = array_keys($params);
+        foreach ($input_keys as $key) {
+            if (empty($params[$key])) {
+                throw new \InvalidArgumentException($key . ' parameter cannot be empty');
+            }
+        }
 
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response->getBody(), true)["results"];
+        try {
+            $response = $this->client->get("gourmet/v1/", [
+                "query" => $params,
+            ]);
+    
+            if ($response->getStatusCode() === 200) {
+                return json_decode($response->getBody(), true)["results"];
+            }
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return response()->json(
+                [
+                    "message" => "Request failed",
+                    "error" => $e->getMessage(),
+                ],
+                400
+            );
         }
 
         return null;
@@ -67,7 +84,7 @@ class RecruitApiService
         ];
 
         if (empty($name)) {
-            return null;
+            throw new \InvalidArgumentException('name cannot be empty');
         }
 
         try {
@@ -115,6 +132,16 @@ class RecruitApiService
             $params["keyword"] = $keyword;
         }
 
+        if ($latitude < -90 || $latitude > 90) {
+            throw new \InvalidArgumentException('Latitude value must be between -90 and 90');
+        }
+        if ($longitude < -180 || $longitude > 180) {
+            throw new \InvalidArgumentException('Longitude value must be between -180 and 180');
+        }
+        if ($range <= 0) {
+            throw new \InvalidArgumentException('Range value must be greater than 0');
+        }
+
         $response = $this->client->get("gourmet/v1/", [
             "query" => $params,
         ]);
@@ -133,8 +160,7 @@ class RecruitApiService
     {
         if ($genre === null) {
             $genreArray = range(1, 17);
-            shuffle($genreArray);
-            $randomGenre = array_shift($genreArray); // 랜덤한 장르 코드 선택
+            $randomGenre = $genreArray[array_rand($genreArray)]; // 랜덤한 장르 코드 선택
             $genre = "G" . str_pad($randomGenre, 3, "0", STR_PAD_LEFT);
         }
 

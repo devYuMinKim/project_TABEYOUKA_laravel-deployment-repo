@@ -21,7 +21,12 @@ class SearchRestaurantsAction
   }
 
   public function __invoke(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?string $keyword = null) {
-    $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $large_area, $middle_area, $keyword);
-    return $this->responder->__invoke($results);
+    try {
+      $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $large_area, $middle_area, $keyword);
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+    }
+
+    return $this->responder($results);
   }
 }
