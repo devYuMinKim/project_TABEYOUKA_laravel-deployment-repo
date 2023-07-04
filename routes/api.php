@@ -18,6 +18,7 @@ use App\Services\RecruitApiService;
 use App\Restaurant\Actions\CreateRestaurantAction;
 use App\Review\Actions\GetReviewsAction;
 use App\Review\Actions\CreateReviewAction;
+use App\Review\Actions\GetFollowedUsersReviewsAction;
 use App\Like\Actions\LikeReviewAction;
 
 /**
@@ -93,6 +94,9 @@ Route::get('/restaurant/{id}', function (
  */
 // 리뷰 조회
 Route::get('/review', GetReviewsAction::class); 
+
+// 팔로우한 사용자의 리뷰 조회
+Route::get('/reviews/followed/{fromUserId}', GetFollowedUsersReviewsAction::class);
 
 // 리뷰 생성
 Route::post('/review', CreateReviewAction::class); 

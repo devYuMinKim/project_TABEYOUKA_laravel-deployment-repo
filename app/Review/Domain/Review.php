@@ -44,6 +44,18 @@ class Review extends Model
   }
 
   /**
+   * Get reviews by user ids
+   */
+  public function getReviewsByUserIds(array $userIds)
+  {
+    if (count($userIds) === 0) {
+        return collect([]);
+    }
+
+    return self::whereIn('user_id', $userIds)->get();
+  }
+
+  /**
    * Create a review
    */
   public function createReview(array $review)
@@ -62,5 +74,27 @@ class Review extends Model
     $result = self::create([...$review, 'like' => 0]);
 
     return $result;
+  }
+
+  /**
+   * Get random reviews
+   */
+  public function getRandomReviews(int $count)
+  {
+      $uniqueUserIds = self::select('user_id')->distinct()->get()->pluck('user_id');
+      
+      $randomUserIds = $uniqueUserIds->count() >= $count ? $uniqueUserIds->random($count) : $uniqueUserIds;
+      
+      $reviews = collect([]);
+
+      foreach ($randomUserIds as $userId) {
+          $singleReview = self::where('user_id', $userId)->inRandomOrder()->first();
+
+          if ($singleReview) {
+              $reviews->push($singleReview);
+          }
+      }
+
+      return $reviews;
   }
 }
