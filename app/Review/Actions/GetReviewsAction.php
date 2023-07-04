@@ -7,13 +7,10 @@ use App\Review\Responders\GetReviewsResponder;
 
 class GetReviewsAction
 {
-  protected $domain;
-  protected $responder;
-
-  public function __construct(Review $domain, GetReviewsResponder $responder)
-  {
-    $this->domain = $domain;
-    $this->responder = $responder;
+  public function __construct(
+    protected Review $domain,
+    protected GetReviewsResponder $responder
+  ) {
   }
   public function __invoke()
   {

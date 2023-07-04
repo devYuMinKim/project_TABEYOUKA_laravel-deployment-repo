@@ -9,13 +9,10 @@ use App\Review\Responders\CreateReviewResponder;
 
 class CreateReviewAction
 {
-  protected $domain;
-  protected $responder;
-
-  public function __construct(Review $domain, CreateReviewResponder $responder)
-  {
-    $this->domain = $domain;
-    $this->responder = $responder;
+  public function __construct(
+    protected Review $domain,
+    protected CreateReviewResponder $responder
+  ) {
   }
 
   public function __invoke(Request $request)

@@ -9,15 +9,10 @@ use App\Restaurant\Responders\CreateRestaurantResponder;
 
 class CreateRestaurantAction
 {
-  protected $domain;
-  protected $responder;
-
   public function __construct(
-    Restaurant $domain,
-    CreateRestaurantResponder $responder
+    protected Restaurant $domain,
+    protected CreateRestaurantResponder $responder
   ) {
-    $this->domain = $domain;
-    $this->responder = $responder;
   }
 
   public function __invoke(Request $request)
@@ -25,14 +20,13 @@ class CreateRestaurantAction
     try {
       $request->validate([
         'id' => 'required|integer',
-        'score' => 'integer',
       ]);
     } catch (ValidationException $e) {
       $errors = $e->errors();
       return response()->json($errors, 422);
     }
 
-    $restaurant = $request->only(['id', 'score']);
+    $restaurant = $request->only(['id']);
 
     $response = $this->domain->createRestaurant($restaurant);
 

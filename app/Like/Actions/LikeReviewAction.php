@@ -9,13 +9,10 @@ use App\Like\Responders\LikeReviewResponder;
 
 class LikeReviewAction
 {
-  protected $domain;
-  protected $responder;
-
-  public function __construct(Like $domain, LikeReviewResponder $responder)
-  {
-    $this->domain = $domain;
-    $this->responder = $responder;
+  public function __construct(
+    protected Like $domain,
+    protected LikeReviewResponder $responder
+  ) {
   }
 
   public function __invoke(Request $request)
