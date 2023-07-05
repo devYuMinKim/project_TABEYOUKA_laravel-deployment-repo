@@ -113,7 +113,7 @@ Route::post('/review', CreateReviewAction::class);
 Route::post('/review/like', LikeReviewAction::class);
 
 // 리뷰 공감취소
-Route::delete('/review/like', UnLikeReviewAction::class);
+Route::post('/review/unlike', UnLikeReviewAction::class);
 
 /**
  * 가게 기능
