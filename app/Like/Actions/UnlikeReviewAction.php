@@ -3,34 +3,40 @@
 namespace App\Like\Actions;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use App\Exceptions\LikeNotFoundException;
 use App\Like\Domain\Like;
-use App\Like\Responders\UnlikeReviewResponder;
+use App\Like\Responders\UnLikeReviewResponder;
 
-class UnlikeReviewAction
+class UnLikeReviewAction
 {
   public function __construct(
     protected Like $domain,
-    protected UnlikeReviewResponder $responder
+    protected UnLikeReviewResponder $responder
   ) {
   }
 
   public function __invoke(Request $request)
   {
-    try {
-      $request->validate([
-        'review_id' => 'required|integer',
-        'user_id' => 'required|string',
-      ]);
-    } catch (ValidationException $e) {
-      $errors = $e->errors();
-      return response()->json($errors, 422);
-    }
+    $this->validateRequest($request);
 
     $review = $request->only(['review_id', 'user_id']);
 
-    $response = $this->domain->unLikeReview($review);
+    try {
+      $response = $this->domain->unLikeReview($review);
+    } catch (LikeNotFoundException $e) {
+      return response()->json(['error' => '공감이 존재하지 않습니다.'], 422);
+    } catch (\Exception $e) {
+      return response()->json(['error' => $e->getMessage()], 500);
+    }
 
     return $this->responder->respond($response);
+  }
+
+  public function validateRequest(Request $request)
+  {
+    $request->validate([
+      'review_id' => 'required|integer',
+      'user_id' => 'required|string',
+    ]);
   }
 }

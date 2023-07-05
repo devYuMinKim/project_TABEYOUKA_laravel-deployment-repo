@@ -4,6 +4,7 @@ namespace App\Restaurant\Domain;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\RestaurantAlreadyExistsException;
 use App\Review\Domain\Review;
 
 class Restaurant extends Model
@@ -26,7 +27,7 @@ class Restaurant extends Model
     $isExist = self::find($restaurant['id']);
 
     if ($isExist) {
-      return response()->json(['message' => '이미 식당이 존재합니다.'], 422);
+      throw new RestaurantAlreadyExistsException();
     }
 
     $result = self::create([...$restaurant, 'score' => 0]);
