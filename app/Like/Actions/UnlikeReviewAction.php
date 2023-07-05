@@ -3,15 +3,15 @@
 namespace App\Like\Actions;
 
 use Illuminate\Http\Request;
-use App\Exceptions\LikeAlreadyExistsException;
+use App\Exceptions\LikeNotFoundException;
 use App\Like\Domain\Like;
-use App\Like\Responders\LikeReviewResponder;
+use App\Like\Responders\UnLikeReviewResponder;
 
-class LikeReviewAction
+class UnLikeReviewAction
 {
   public function __construct(
     protected Like $domain,
-    protected LikeReviewResponder $responder
+    protected UnLikeReviewResponder $responder
   ) {
   }
 
@@ -22,9 +22,9 @@ class LikeReviewAction
     $review = $request->only(['review_id', 'user_id']);
 
     try {
-      $response = $this->domain->likeReview($review);
-    } catch (LikeAlreadyExistsException $e) {
-      return response()->json(['error' => '이미 공감한 리뷰입니다.'], 422);
+      $response = $this->domain->unLikeReview($review);
+    } catch (LikeNotFoundException $e) {
+      return response()->json(['error' => '공감이 존재하지 않습니다.'], 422);
     } catch (\Exception $e) {
       return response()->json(['error' => $e->getMessage()], 500);
     }

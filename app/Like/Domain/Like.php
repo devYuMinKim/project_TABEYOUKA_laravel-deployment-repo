@@ -4,6 +4,8 @@ namespace App\Like\Domain;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\LikeAlreadyExistsException;
+use App\Exceptions\LikeNotFoundException;
 use App\Review\Domain\Review;
 use App\Profile\Domains\Users;
 
@@ -34,10 +36,25 @@ class Like extends Model
       ->exists();
 
     if ($isExist) {
-      return response()->json(['message' => '이미 좋아요를 눌렀습니다.'], 422);
+      throw new LikeAlreadyExistsException();
     }
 
     $result = self::create($review);
+
+    return $result;
+  }
+
+  public function unLikeReview(array $review)
+  {
+    $like = self::where('review_id', $review['review_id'])
+      ->where('user_id', $review['user_id'])
+      ->first();
+
+    if (!$like) {
+      throw new LikeNotFoundException();
+    }
+
+    $result = $like->delete();
 
     return $result;
   }

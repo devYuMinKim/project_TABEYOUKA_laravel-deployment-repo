@@ -17,9 +17,11 @@ use App\Restaurant\Responders\FindRestaurantByIdResponder;
 use App\Services\RecruitApiService;
 use App\Restaurant\Actions\CreateRestaurantAction;
 use App\Review\Actions\GetReviewsAction;
+use App\Review\Actions\GetReviewByIdAction;
 use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\GetFollowedUsersReviewsAction;
 use App\Like\Actions\LikeReviewAction;
+use App\Like\Actions\UnLikeReviewAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -38,9 +40,12 @@ Route::get('/search', function (
 
     $result = $action($genre, $large_area, $middle_area, $keyword);
   } catch (\Exception $e) {
-    return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+    return response()->json(
+      ['error' => 'Error occurred: ' . $e->getMessage()],
+      500
+    );
   }
-  
+
   return $responder($result);
 });
 
@@ -88,25 +93,32 @@ Route::get('/restaurant/{id}', function (
   return $responder($restaurant);
 });
 
-
 /**
  * 리뷰 기능
  */
+
 // 리뷰 조회
-Route::get('/review', GetReviewsAction::class); 
+Route::get('/review', GetReviewsAction::class);
+
+// 리뷰 아이디로 리뷰 조회
+Route::get('/review/{id}', GetReviewByIdAction::class);
 
 // 팔로우한 사용자의 리뷰 조회
 Route::get('/reviews/followed/{fromUserId}', GetFollowedUsersReviewsAction::class);
 
 // 리뷰 생성
-Route::post('/review', CreateReviewAction::class); 
+Route::post('/review', CreateReviewAction::class);
 
 // 리뷰 공감
-Route::post('/review/like', LikeReviewAction::class); 
+Route::post('/review/like', LikeReviewAction::class);
+
+// 리뷰 공감취소
+Route::delete('/review/like', UnLikeReviewAction::class);
 
 /**
  * 가게 기능
  */
+
 // 가게 생성
 Route::post('/restaurant', CreateRestaurantAction::class);
 
