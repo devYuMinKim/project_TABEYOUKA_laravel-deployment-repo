@@ -3,14 +3,15 @@
 namespace App\Review\Actions;
 
 use Illuminate\Http\Request;
-use App\Review\Domain\Review;
-use App\Review\Responders\CreateReviewResponder;
+
+use App\Review\Domain\Repositories\ReviewRepository as Repository;
+use App\Review\Responders\CreateReviewResponder as Responder;
 
 class CreateReviewAction
 {
   public function __construct(
-    protected Review $domain,
-    protected CreateReviewResponder $responder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
 
@@ -21,7 +22,7 @@ class CreateReviewAction
     $review = $request->only(['content', 'score', 'restaurant_id', 'user_id']);
 
     try {
-      $reponse = $this->domain->createReview($review);
+      $reponse = $this->repository->createReview($review);
     } catch (\Exception $e) {
       response()->json(['error' => $e->getMessage()], 500);
     }
