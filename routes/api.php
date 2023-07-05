@@ -20,7 +20,7 @@ use App\Review\Actions\GetReviewsAction;
 use App\Review\Actions\GetReviewByIdAction;
 use App\Review\Actions\CreateReviewAction;
 use App\Like\Actions\LikeReviewAction;
-use App\Like\Actions\UnlikeReviewAction;
+use App\Like\Actions\UnLikeReviewAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -39,9 +39,12 @@ Route::get('/search', function (
 
     $result = $action($genre, $large_area, $middle_area, $keyword);
   } catch (\Exception $e) {
-    return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+    return response()->json(
+      ['error' => 'Error occurred: ' . $e->getMessage()],
+      500
+    );
   }
-  
+
   return $responder($result);
 });
 
