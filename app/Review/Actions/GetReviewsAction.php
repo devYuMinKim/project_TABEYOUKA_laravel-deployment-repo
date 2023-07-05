@@ -2,20 +2,33 @@
 
 namespace App\Review\Actions;
 
-use App\Review\Domain\Review;
-use App\Review\Responders\GetReviewsResponder;
+use Illuminate\Http\Request;
+use App\Review\Domain\Repositories\ReviewRepository as Repository;
+use App\Review\Responders\GetReviewsResponder as Responder;
 
 class GetReviewsAction
 {
   public function __construct(
-    protected Review $domain,
-    protected GetReviewsResponder $responder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
-  public function __invoke()
+  public function __invoke(Request $request)
   {
-    $response = $this->domain->getReviews();
+    $this->validateRequest($request);
+
+    $range = $request->only(['count', 'page']);
+
+    $response = $this->repository->getReviews($range);
 
     return $this->responder->respond($response);
+  }
+
+  public function validateRequest(Request $request)
+  {
+    $request->validate([
+      'count' => 'integer',
+      'page' => 'integer',
+    ]);
   }
 }

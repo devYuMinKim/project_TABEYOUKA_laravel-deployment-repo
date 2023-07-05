@@ -4,14 +4,15 @@ namespace App\Like\Actions;
 
 use Illuminate\Http\Request;
 use App\Exceptions\LikeAlreadyExistsException;
-use App\Like\Domain\Like;
-use App\Like\Responders\LikeReviewResponder;
+
+use App\Like\Domain\Repositories\LikeRepository as Repository;
+use App\Like\Responders\LikeReviewResponder as Responder;
 
 class LikeReviewAction
 {
   public function __construct(
-    protected Like $domain,
-    protected LikeReviewResponder $responder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
 
@@ -22,7 +23,7 @@ class LikeReviewAction
     $review = $request->only(['review_id', 'user_id']);
 
     try {
-      $response = $this->domain->likeReview($review);
+      $response = $this->repository->likeReview($review);
     } catch (LikeAlreadyExistsException $e) {
       return response()->json(['error' => '이미 공감한 리뷰입니다.'], 422);
     } catch (\Exception $e) {
