@@ -4,7 +4,7 @@ namespace App\Auth\Actions;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Auth\Domains\Users;
+use App\profile\Domains\Entities\Users;
 use App\Auth\Responders\LoginResponder;
 
 class LoginAction
