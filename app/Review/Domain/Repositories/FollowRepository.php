@@ -9,7 +9,9 @@ class FollowRepository
 {
   public function findByFromUser(string $fromUser): array
   {
-    $follows = DB::table('follows')->where('from_user', $fromUser)->get();
+    $follows = DB::table('follows')
+      ->where('from_user', $fromUser)
+      ->get();
 
     $result = [];
 
