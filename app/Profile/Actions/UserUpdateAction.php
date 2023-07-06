@@ -2,20 +2,20 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Entities\Users;
+use App\Profile\Domains\Repositories\updateUserData;
 use App\Profile\Responders\UserUpdateResponder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserUpdateAction
 {
-  protected $users, $userUpdateResponder;
+  protected $updateUserData, $userUpdateResponder;
 
   public function __construct(
-    Users $users,
+    updateUserData $updateUserData,
     UserUpdateResponder $userUpdateResponder
   ) {
-    $this->users = $users;
+    $this->updateUserData = $updateUserData;
     $this->userUpdateResponder = $userUpdateResponder;
   }
 
@@ -43,7 +43,7 @@ class UserUpdateAction
       'profile_image' => $filePath,
     ];
 
-    $updatedUser = $this->users->updateUserData((object) $userData);
+    $updatedUser = $this->updateUserData->updateUserData((object) $userData);
     return $this->userUpdateResponder->userUpdateResponse($updatedUser);
   }
 }

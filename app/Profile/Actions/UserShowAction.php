@@ -2,20 +2,20 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Entities\Users;
+use App\Profile\Domains\Repositories\ShowUserData;
 use App\Profile\Responders\UserShowResponder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserShowAction
 {
-  protected $users, $userShowResponder;
+  protected $showUserData, $userShowResponder;
 
   public function __construct(
-    Users $users,
+    ShowUserData $showUserData,
     UserShowResponder $userShowResponder
   ) {
-    $this->users = $users;
+    $this->showUserData = $showUserData;
     $this->userShowResponder = $userShowResponder;
   }
 
@@ -30,7 +30,7 @@ class UserShowAction
       $errors = $e->errors();
       return response()->json($errors, 422);
     }
-    $result = $this->users->showUser($request->id);
+    $result = $this->showUserData->showUser($request->id);
     return $this->userShowResponder->userShowResponse($result);
   }
 }
