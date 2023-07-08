@@ -12,7 +12,7 @@ class Users extends Model
 
   protected $keyType = 'string';
 
-  protected $fillable = ['id', 'nickname', 'profile_image'];
+  protected $fillable = ['id', 'nickname', 'profile_image', 'bio'];
 }
 
 ?>

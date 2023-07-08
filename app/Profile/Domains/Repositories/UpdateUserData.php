@@ -15,6 +15,7 @@ class updateUserData
 
     $user->nickname = $userData->nickname;
     $user->profile_image = $userData->profile_image;
+    $user->bio = $userData->bio;
     $result = $user->save();
 
     return $result;
