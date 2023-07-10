@@ -2,7 +2,7 @@
 
 namespace App\Review\Responders;
 
-class GetReviewByIdResponder
+class GetReviewByResponder
 {
   public function respond($result)
   {
