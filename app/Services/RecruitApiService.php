@@ -17,12 +17,14 @@ class RecruitApiService
 
     /**
      * 지역 코드를 기반으로 한 식당 검색 메서드
-     * - 장르, 대형 지역, 중형 지역, 검색 키워드 선택 가능
+     * - 장르, 대형 지역, 중형 지역, 위도, 경도, 검색 키워드 선택 가능
      */
     public function searchRestaurantsByLocationCode(
         ?string $genre = null,
         ?string $large_area = null,
         ?string $middle_area = null,
+        ?float $lat = null,
+        ?float $lng = null,
         ?string $keyword = null
     ) {
         $params = [
@@ -38,6 +40,12 @@ class RecruitApiService
         }
         if ($middle_area !== null) {
             $params["middle_area"] = $middle_area;
+        }
+        if ($lat !== null) {
+            $lat < -90 || $lat > 90 ? throw new \InvalidArgumentException('Latitude value must be between -90 and 90') : $params["lat"] = $lat;
+        }
+        if ($lng !== null) {
+            $lng < -180 || $lng > 180 ? throw new \InvalidArgumentException('Longitude value must be between -180 and 180') : $params["lng"] = $lng;
         }
         if ($keyword !== null) {
             $params["keyword"] = $keyword;
