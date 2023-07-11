@@ -22,6 +22,8 @@ use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\GetFollowedUsersReviewsAction;
 use App\Like\Actions\LikeReviewAction;
 use App\Like\Actions\UnLikeReviewAction;
+use App\Profile\Actions\FollowerAction;
+use App\Profile\Actions\FollowingAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -132,3 +134,9 @@ Route::post('/user', LoginAction::class);
 Route::get('/user', UserShowAction::class);
 Route::patch('/user', UserUpdateAction::class);
 Route::delete('/user', SignoutAction::class);
+
+/**
+ * 팔로워, 팔로잉 관련 기능
+ */
+Route::get('/follower', FollowerAction::class);
+Route::get('/following', FollowingAction::class);

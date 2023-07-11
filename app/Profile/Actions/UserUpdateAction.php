@@ -25,23 +25,26 @@ class UserUpdateAction
       $request->validate([
         'id' => 'required',
         'nickname' => 'required',
-        'profile_image' => 'required',
+        'bio' => 'required',
+        // 'profile_image' => 'required',
       ]);
     } catch (ValidationException $e) {
       // 유효성 검사 실패 시 처리 로직
-      $errors = $e->errors();
-      return response()->json($errors, 422);
+      $errMsg = $e->errors();
+      return response()->json($errMsg, 422);
       // 오류 메시지를 반환하거나 다른 동작 수행
     }
-
-    $fileName = $request->profile_image->store('public/images/profile');
-    $filePath = 'http://localhost:8000/images/profile/' . basename($fileName);
-
     $userData = [
       'id' => $request->id,
       'nickname' => $request->nickname,
-      'profile_image' => $filePath,
+      'bio' => $request->bio,
     ];
+
+    if ($request->profile_image) {
+      $fileName = $request->profile_image->store('public/images/profile');
+      $filePath = 'http://localhost:8000/images/profile/' . basename($fileName);
+      $userData['profile_image'] = $filePath;
+    }
 
     $updatedUser = $this->updateUserData->updateUserData((object) $userData);
     return $this->userUpdateResponder->userUpdateResponse($updatedUser);
