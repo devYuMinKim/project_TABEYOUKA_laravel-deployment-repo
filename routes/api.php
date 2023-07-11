@@ -36,13 +36,12 @@ Route::get('/search', function (
 ) {
   try {
     $genre = $request->input('genre');
-    $large_area = $request->input('large_area');
-    $middle_area = $request->input('middle_area');
+    $area = $request->input('area');
     $lat = $request->input('lat');
     $lng = $request->input('lng');
     $keyword = $request->input('name');
 
-    $result = $action($genre, $large_area, $middle_area, $lat, $lng, $keyword);
+    $result = $action($genre, $area, $lat, $lng, $keyword);
   } catch (\Exception $e) {
     return response()->json(
       ['error' => 'Error occurred: ' . $e->getMessage()],

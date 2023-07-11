@@ -21,8 +21,7 @@ class RecruitApiService
      */
     public function searchRestaurantsByLocationCode(
         ?string $genre = null,
-        ?string $large_area = null,
-        ?string $middle_area = null,
+        ?string $area = null,
         ?float $lat = null,
         ?float $lng = null,
         ?string $keyword = null
@@ -35,17 +34,18 @@ class RecruitApiService
         if ($genre !== null) {
             $params["genre"] = $genre;
         }
-        if ($large_area !== null) {
-            $params["large_area"] = $large_area;
-        }
-        if ($middle_area !== null) {
-            $params["middle_area"] = $middle_area;
+        if ($area !== null) {
+            if (strpos($area, "Z0") !== false) {
+                $params["large_area"] = $area;
+            } else {
+                $params["middle_area"] = $area;
+            }            
         }
         if ($lat !== null) {
-            $lat < -90 || $lat > 90 ? throw new \InvalidArgumentException('Latitude value must be between -90 and 90') : $params["lat"] = $lat;
+            ($lat < -90 || $lat > 90) ? throw new \InvalidArgumentException("Latitude value must be between -90 and 90") : $params["lat"] = $lat;
         }
         if ($lng !== null) {
-            $lng < -180 || $lng > 180 ? throw new \InvalidArgumentException('Longitude value must be between -180 and 180') : $params["lng"] = $lng;
+            ($lng < -180 || $lng > 180) ? throw new \InvalidArgumentException("Longitude value must be between -180 and 180") : $params["lng"] = $lng;
         }
         if ($keyword !== null) {
             $params["keyword"] = $keyword;
@@ -54,7 +54,7 @@ class RecruitApiService
         $input_keys = array_keys($params);
         foreach ($input_keys as $key) {
             if (empty($params[$key])) {
-                throw new \InvalidArgumentException($key . ' parameter cannot be empty');
+                throw new \InvalidArgumentException($key . " parameter cannot be empty");
             }
         }
 
@@ -92,7 +92,7 @@ class RecruitApiService
         ];
 
         if (empty($name)) {
-            throw new \InvalidArgumentException('name cannot be empty');
+            throw new \InvalidArgumentException("name cannot be empty");
         }
 
         try {
@@ -141,13 +141,13 @@ class RecruitApiService
         }
 
         if ($latitude < -90 || $latitude > 90) {
-            throw new \InvalidArgumentException('Latitude value must be between -90 and 90');
+            throw new \InvalidArgumentException("Latitude value must be between -90 and 90");
         }
         if ($longitude < -180 || $longitude > 180) {
-            throw new \InvalidArgumentException('Longitude value must be between -180 and 180');
+            throw new \InvalidArgumentException("Longitude value must be between -180 and 180");
         }
         if ($range <= 0) {
-            throw new \InvalidArgumentException('Range value must be greater than 0');
+            throw new \InvalidArgumentException("Range value must be greater than 0");
         }
 
         $response = $this->client->get("gourmet/v1/", [
