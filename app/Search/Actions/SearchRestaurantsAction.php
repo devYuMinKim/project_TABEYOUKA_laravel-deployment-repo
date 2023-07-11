@@ -20,13 +20,13 @@ class SearchRestaurantsAction
     $this->responder = $responder;
   }
 
-  public function __invoke(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?string $keyword = null) {
+  public function __invoke(?string $genre = null, ?string $large_area = null, ?string $middle_area = null, ?float $lat = null, ?float $lng = null, ?string $keyword = null) {
     try {
-      $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $large_area, $middle_area, $keyword);
+      $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $large_area, $middle_area, $lat, $lng, $keyword);
     } catch (\Exception $e) {
       return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
     }
 
-    return $this->responder($results);
+    return $this->responder->__invoke($results);
   }
 }
