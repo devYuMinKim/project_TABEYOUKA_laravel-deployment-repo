@@ -22,8 +22,13 @@ use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\GetFollowedUsersReviewsAction;
 use App\Like\Actions\LikeReviewAction;
 use App\Like\Actions\UnLikeReviewAction;
+use App\Profile\Actions\CreateStoryListAction;
+use App\Profile\Actions\EditStoryListAction;
 use App\Profile\Actions\FollowerAction;
 use App\Profile\Actions\FollowingAction;
+use App\Profile\Actions\GetStoryAction;
+use App\Profile\Actions\GetStoryListAction;
+use App\Profile\Actions\GetStoryListByIdAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -141,3 +146,14 @@ Route::delete('/user', SignoutAction::class);
  */
 Route::get('/follower', FollowerAction::class);
 Route::get('/following', FollowingAction::class);
+
+// 스토리 리스트 불러오기
+Route::get('/storylist', GetStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 특정 스토리 리스트 불러오기 (수정 시 기존 정보 렌더링 사용)
+Route::get('/storylist/{id}', GetStoryListByIdAction::class);
+// 스토리 리스트 생성
+Route::post('/storylist', CreateStoryListAction::class);
+// 스토리 리스트 수정
+Route::patch('/storylist', EditStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 해당 리뷰 목록 반환
+Route::get('/story', GetStoryAction::class);
