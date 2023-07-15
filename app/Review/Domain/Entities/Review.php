@@ -15,6 +15,7 @@ class Review extends Model
   protected $fillable = [
     'id',
     'content',
+    'review_image',
     'score',
     'like',
     'restaurant_id',

@@ -14,12 +14,12 @@ return new class extends Migration {
       $table->unsignedBigInteger('story_list_id');
       $table->unsignedBigInteger('review_id');
       $table
-        ->unique('story_list_id')
+        ->foreign('story_list_id')
         ->references('id')
-        ->on('stort_lists')
+        ->on('story_lists')
         ->onDelete('cascade');
       $table
-        ->unique('review_id')
+        ->foreign('review_id')
         ->references('id')
         ->on('reviews')
         ->onDelete('cascade');
