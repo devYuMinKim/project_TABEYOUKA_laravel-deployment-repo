@@ -6,6 +6,6 @@ class CreateReviewResponder
 {
   public function respond($result)
   {
-    return response()->json(['message' => '리뷰가 생성되었습니다.']);
+    return response()->json($result, 201);
   }
 }
