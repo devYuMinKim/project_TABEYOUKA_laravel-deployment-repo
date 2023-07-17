@@ -81,6 +81,18 @@ class ReviewRepository
     return $review;
   }
 
+  public function getReviewsByRestaurantId($restaurant_id)
+  {
+    $reviews = Review::where('restaurant_id', $restaurant_id)->get();
+
+    foreach ($reviews as $review) {
+      $images = self::getReviewImages($review->id);
+      $review->images = $images['images'];
+    }
+
+    return $reviews;
+  }
+
   /**
    * Get all reviews
    */
