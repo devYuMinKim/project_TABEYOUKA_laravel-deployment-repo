@@ -25,7 +25,13 @@ class GetReviewByAction
     } elseif (isset($review['user_id'])) {
       $response = $this->repository->getReviewsByUserIds([$review['user_id']]);
     } else {
-      response()->json(['error' => 'Invalid request'], 400);
+      return response()->json(
+        [
+          'error' =>
+            'At least one value of review_id or user_id must be assigned.',
+        ],
+        400
+      );
     }
 
     return $this->responder->respond($response);

@@ -4,6 +4,8 @@ use App\Auth\Actions\SignoutAction;
 use App\Profile\Actions\UserShowAction;
 use App\Profile\Actions\UserUpdateAction;
 use App\Auth\Actions\LoginAction;
+use App\Review\Actions\GetReviewImagesAction;
+use App\Review\Actions\UploadImageAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Search\Actions\SearchRestaurantsAction;
@@ -22,8 +24,13 @@ use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\GetFollowedUsersReviewsAction;
 use App\Like\Actions\LikeReviewAction;
 use App\Like\Actions\UnLikeReviewAction;
+use App\Profile\Actions\CreateStoryListAction;
+use App\Profile\Actions\EditStoryListAction;
 use App\Profile\Actions\FollowerAction;
 use App\Profile\Actions\FollowingAction;
+use App\Profile\Actions\GetStoryAction;
+use App\Profile\Actions\GetStoryListAction;
+use App\Profile\Actions\GetStoryListByIdAction;
 
 /**
  * 가게 검색 기능(장르, 대형 지역, 중형 지역, 가게명를 선택하여 검색 가능)
@@ -121,8 +128,14 @@ Route::post('/review/like', LikeReviewAction::class);
 // 리뷰 공감취소
 Route::post('/review/unlike', UnLikeReviewAction::class);
 
+// 리뷰 사진 조회
+Route::get('/review/images', GetReviewImagesAction::class);
+
+// 리뷰 사진 업로드
+Route::post('/review/image', UploadImageAction::class);
+
 /**
- * 가게 기능
+ * 가게 기능z
  */
 
 // 가게 생성
@@ -141,3 +154,14 @@ Route::delete('/user', SignoutAction::class);
  */
 Route::get('/follower', FollowerAction::class);
 Route::get('/following', FollowingAction::class);
+
+// 스토리 리스트 불러오기
+Route::get('/storylist', GetStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 특정 스토리 리스트 불러오기 (수정 시 기존 정보 렌더링 사용)
+Route::get('/storylist/{id}', GetStoryListByIdAction::class);
+// 스토리 리스트 생성
+Route::post('/storylist', CreateStoryListAction::class);
+// 스토리 리스트 수정
+Route::patch('/storylist', EditStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 해당 리뷰 목록 반환
+Route::get('/story', GetStoryAction::class);

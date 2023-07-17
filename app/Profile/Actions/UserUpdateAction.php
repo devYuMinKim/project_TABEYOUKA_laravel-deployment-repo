@@ -42,7 +42,7 @@ class UserUpdateAction
 
     if ($request->profile_image) {
       $fileName = $request->profile_image->store('public/images/profile');
-      $filePath = 'http://localhost:8000/images/profile/' . basename($fileName);
+      $filePath = 'http://localhost:8000/storage/images/profile/' . basename($fileName);
       $userData['profile_image'] = $filePath;
     }
 

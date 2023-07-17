@@ -10,22 +10,17 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::create('stories', function (Blueprint $table) {
-      $table->bigIncrements('id');
-      $table->string('user_id', 255);
-      $table->unsignedBigInteger('review_id');
-      $table->timestamps();
-
-      $table
-        ->foreign('user_id')
-        ->references('id')
-        ->on('users')
-        ->onDelete('cascade');
+    Schema::create('review_images', function (Blueprint $table) {
+      $table->id();
+      $table->unsignedBigInteger('review_id')->nullable(false);
       $table
         ->foreign('review_id')
         ->references('id')
         ->on('reviews')
         ->onDelete('cascade');
+      $table->string('image_url')->nullable(false);
+
+      $table->timestamps();
     });
   }
 
@@ -34,8 +29,6 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropForeign(['user_id']);
-    Schema::dropForeign(['review_id']);
-    Schema::dropIfExists('stories');
+    Schema::dropIfExists('review_images');
   }
 };
