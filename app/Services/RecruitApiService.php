@@ -15,6 +15,19 @@ class RecruitApiService
         ]);
     }
 
+    private function getResponseFromApi(array $params)
+    {
+        $response = $this->client->get("gourmet/v1", [
+            "query" => $params,
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            return json_decode($response->getBody(), true)["results"];
+        }
+
+        return null;
+    }
+
     /**
      * 지역 코드를 기반으로 한 식당 검색 메서드
      * - 장르, 대형 지역, 중형 지역, 위도, 경도, 검색 키워드 선택 가능
@@ -24,7 +37,9 @@ class RecruitApiService
         ?string $area = null,
         ?float $lat = null,
         ?float $lng = null,
-        ?string $keyword = null
+        ?string $keyword = null,
+        ?int $start = 1,
+        ?int $count = 10,
     ) {
         $params = [
             "key" => env("HOTPEPPER_KEY"),
@@ -50,6 +65,12 @@ class RecruitApiService
         if ($keyword !== null) {
             $params["keyword"] = $keyword;
         }
+        if ($start !== 1) {
+            $params["start"] = $start;
+        }
+        if ($count !== 10) {
+            $params["count"] = $count;
+        }
 
         $input_keys = array_keys($params);
         foreach ($input_keys as $key) {
@@ -58,25 +79,38 @@ class RecruitApiService
             }
         }
 
-        try {
+        $allResults = [];
+        $totalCount = 0;
+
+        do {
             $response = $this->client->get("gourmet/v1/", [
                 "query" => $params,
             ]);
-    
-            if ($response->getStatusCode() === 200) {
-                return json_decode($response->getBody(), true)["results"];
-            }
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            return response()->json(
-                [
-                    "message" => "Request failed",
-                    "error" => $e->getMessage(),
-                ],
-                400
-            );
-        }
 
-        return null;
+            if ($response->getStatusCode() === 200) {
+                $results = json_decode($response->getBody(), true)["results"];
+
+                if ($count === 100) {
+                    $results["results_available"] = $results["results_available"];
+                } else {
+                    $results["results_available"] = min($count, $results["results_available"]);
+                }
+
+                $totalCount = $results["results_available"];
+                $allResults = array_merge($allResults, $results["shop"]);
+                $count -= count($results["shop"]);
+                $start += count($results["shop"]);
+
+                $params["start"] = $start;
+            } else {
+                throw new \GuzzleHttp\Exception\GuzzleException("Request failed");
+            }
+        } while ($count > 0 && $start <= $totalCount);
+
+        return [
+            "results_available" => $totalCount,
+            "results" => $allResults,
+        ];
     }
 
     /**
@@ -96,14 +130,14 @@ class RecruitApiService
         }
 
         try {
-            $response = $this->client->get("gourmet/v1/", [
-                "query" => $params,
-            ]);
+            $results = $this->getResponseFromApi($params);
 
-            if ($response->getStatusCode() === 200) {
-                return json_decode($response->getBody(), true)["results"];
+            if ($results === null) {
+                throw new \UnexpectedValueException("Failed to retrieve results from API");
             }
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+
+            return $results;
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
             return response()->json(
                 [
                     "message" => "Request failed",
@@ -112,8 +146,6 @@ class RecruitApiService
                 400
             );
         }
-
-        return null;
     }
 
     /**
@@ -150,15 +182,13 @@ class RecruitApiService
             throw new \InvalidArgumentException("Range value must be greater than 0");
         }
 
-        $response = $this->client->get("gourmet/v1/", [
-            "query" => $params,
-        ]);
+        $results = $this->getResponseFromApi($params);
 
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response->getBody(), true)["results"];
+        if ($results === null) {
+            throw new \UnexpectedValueException("Failed to retrieve results from API");
         }
 
-        return null;
+        return $results;
     }
 
     /**
@@ -179,15 +209,13 @@ class RecruitApiService
             "order" => 4, // 인기순 정렬
         ];
 
-        $response = $this->client->get("gourmet/v1/", [
-            "query" => $params,
-        ]);
+        $results = $this->getResponseFromApi($params);
 
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response->getBody(), true)["results"];
+        if ($results === null) {
+            throw new \UnexpectedValueException("Failed to retrieve results from API");
         }
 
-        return null;
+        return $results;
     }
 
     /**
@@ -201,14 +229,12 @@ class RecruitApiService
             "format" => "json",
         ];
 
-        $response = $this->client->get("gourmet/v1/", [
-            "query" => $params,
-        ]);
+        $results = $this->getResponseFromApi($params);
 
-        if ($response->getStatusCode() === 200) {
-            return json_decode($response->getBody(), true)["results"];
+        if ($results === null) {
+            throw new \UnexpectedValueException("Failed to retrieve results from API");
         }
 
-        return null;
+        return $results;
     }
 }
