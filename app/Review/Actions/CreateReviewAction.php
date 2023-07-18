@@ -24,7 +24,7 @@ class CreateReviewAction
     try {
       $reponse = $this->repository->createReview($review);
     } catch (\Exception $e) {
-      response()->json(['error' => $e->getMessage()], 500);
+      return response()->json(['error' => $e->getMessage()], 500);
     }
 
     return $this->responder->respond($reponse);
@@ -33,8 +33,8 @@ class CreateReviewAction
   public function validateRequest(Request $request)
   {
     $request->validate([
-      'content' => 'string',
-      'score' => 'integer',
+      'content' => 'string|nullable',
+      'score' => 'integer|nullable',
       'restaurant_id' => 'required|integer',
       'user_id' => 'required|string',
     ]);

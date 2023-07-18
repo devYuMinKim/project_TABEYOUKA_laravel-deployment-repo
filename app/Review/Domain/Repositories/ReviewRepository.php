@@ -2,6 +2,7 @@
 
 namespace App\Review\Domain\Repositories;
 
+use App\Review\Domain\Entities\ReviewImages;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Review\Domain\Entities\Review;
 use App\Restaurant\Domain\Entities\Restaurant;
@@ -73,7 +74,23 @@ class ReviewRepository
   {
     $review = Review::find($id);
 
+    $images = self::getReviewImages($id);
+
+    $review->images = $images['images'];
+
     return $review;
+  }
+
+  public function getReviewsByRestaurantId($restaurant_id)
+  {
+    $reviews = Review::where('restaurant_id', $restaurant_id)->get();
+
+    foreach ($reviews as $review) {
+      $images = self::getReviewImages($review->id);
+      $review->images = $images['images'];
+    }
+
+    return $reviews;
   }
 
   /**
@@ -93,6 +110,44 @@ class ReviewRepository
       ->take($count)
       ->get();
 
+    foreach ($reviews as $review) {
+      $images = self::getReviewImages($review->id);
+      $review->images = $images['images'];
+    }
+
     return $reviews;
+  }
+
+  /**
+   * Upload Images
+   * TODO: 이미지 storage 서버로 분리해야 함.
+   */
+  public function uploadImage($image, $review_id)
+  {
+    $storedFileName = $image->store('review_images/' . date('Ym'));
+
+    $uploadedImage = ReviewImages::create([
+      'review_id' => $review_id,
+      'image_url' => $storedFileName,
+    ]);
+
+    return $uploadedImage;
+  }
+
+  /**
+   * Get Review Images
+   */
+  public function getReviewImages($review_id)
+  {
+    $reviewImages = ReviewImages::select('image_url')
+      ->where('review_id', $review_id)
+      ->pluck('image_url')
+      ->toArray();
+
+    $result = [
+      'images' => $reviewImages ?? [],
+    ];
+
+    return $result;
   }
 }
