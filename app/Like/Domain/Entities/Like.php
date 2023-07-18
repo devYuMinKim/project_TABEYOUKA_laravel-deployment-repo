@@ -12,6 +12,7 @@ class Like extends Model
   use HasFactory;
 
   protected $table = 'likes';
+  protected $primaryKey = ['review_id', 'user_id'];
   protected $fillable = ['review_id', 'user_id', 'created_at', 'updated_at'];
 
   public function review()
