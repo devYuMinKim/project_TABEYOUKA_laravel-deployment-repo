@@ -11,6 +11,7 @@ class ReviewImages extends Model
   use HasFactory;
 
   protected $table = 'review_images';
+  protected $primaryKey = 'id';
   protected $fillable = [
     'id',
     'review_id',

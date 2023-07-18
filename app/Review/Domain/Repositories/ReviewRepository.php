@@ -2,10 +2,11 @@
 
 namespace App\Review\Domain\Repositories;
 
-use App\Review\Domain\Entities\ReviewImages;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Review\Domain\Entities\Review;
 use App\Restaurant\Domain\Entities\Restaurant;
+use App\Review\Domain\Entities\Review;
+use App\Review\Domain\Entities\ReviewImages;
+use App\Profile\Domains\Entities\Users;
 
 class ReviewRepository
 {
@@ -75,8 +76,14 @@ class ReviewRepository
     $review = Review::find($id);
 
     $images = self::getReviewImages($id);
+    $user = self::getReviewUserData($review->user_id);
+    $restaurant = self::getReviewRestaurantData($review->restaurant_id);
 
+    unset($review->user_id);
+    unset($review->restaurant_id);
     $review->images = $images['images'];
+    $review->user = $user;
+    $review->restaurant = $restaurant;
 
     return $review;
   }
@@ -87,7 +94,14 @@ class ReviewRepository
 
     foreach ($reviews as $review) {
       $images = self::getReviewImages($review->id);
+      $user = self::getReviewUserData($review->user_id);
+      $restaurant = self::getReviewRestaurantData($review->restaurant_id);
+
+      unset($review->user_id);
+      unset($review->restaurant_id);
       $review->images = $images['images'];
+      $review->user = $user;
+      $review->restaurant = $restaurant;
     }
 
     return $reviews;
@@ -98,11 +112,7 @@ class ReviewRepository
    */
   public function getReviews($range)
   {
-    if (!isset($range['count'])) {
-      return Review::all();
-    }
-
-    $count = $range['count'];
+    $count = $range['count'] ?? 10;
     $page = $range['page'] ?? 1;
 
     $reviews = Review::orderBy('created_at', 'desc')
@@ -111,8 +121,15 @@ class ReviewRepository
       ->get();
 
     foreach ($reviews as $review) {
+      $user = self::getReviewUserData($review->user_id);
+      $restaurant = self::getReviewRestaurantData($review->restaurant_id);
       $images = self::getReviewImages($review->id);
+
+      unset($review->user_id);
+      unset($review->restaurant_id);
       $review->images = $images['images'];
+      $review->user = $user;
+      $review->restaurant = $restaurant;
     }
 
     return $reviews;
@@ -149,5 +166,26 @@ class ReviewRepository
     ];
 
     return $result;
+  }
+
+  public function getReviewUserData($user_id)
+  {
+    return Users::select(
+      'id',
+      'nickname',
+      'profile_image',
+      'bio',
+      'follower',
+      'following'
+    )
+      ->where('id', $user_id)
+      ->first();
+  }
+
+  public function getReviewRestaurantData($restaurant_id)
+  {
+    return Restaurant::select('id', 'score')
+      ->where('id', $restaurant_id)
+      ->first();
   }
 }
