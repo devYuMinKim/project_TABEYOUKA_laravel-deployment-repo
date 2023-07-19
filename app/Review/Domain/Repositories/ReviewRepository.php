@@ -3,8 +3,10 @@
 namespace App\Review\Domain\Repositories;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Review\Domain\Entities\Review;
 use App\Restaurant\Domain\Entities\Restaurant;
+use App\Review\Domain\Entities\Review;
+use App\Review\Domain\Entities\ReviewImages;
+use App\Profile\Domains\Entities\Users;
 
 class ReviewRepository
 {
@@ -73,7 +75,36 @@ class ReviewRepository
   {
     $review = Review::find($id);
 
+    $images = self::getReviewImages($id);
+    $user = self::getReviewUserData($review->user_id);
+    $restaurant = self::getReviewRestaurantData($review->restaurant_id);
+
+    unset($review->user_id);
+    unset($review->restaurant_id);
+    $review->images = $images['images'];
+    $review->user = $user;
+    $review->restaurant = $restaurant;
+
     return $review;
+  }
+
+  public function getReviewsByRestaurantId($restaurant_id)
+  {
+    $reviews = Review::where('restaurant_id', $restaurant_id)->get();
+
+    foreach ($reviews as $review) {
+      $images = self::getReviewImages($review->id);
+      $user = self::getReviewUserData($review->user_id);
+      $restaurant = self::getReviewRestaurantData($review->restaurant_id);
+
+      unset($review->user_id);
+      unset($review->restaurant_id);
+      $review->images = $images['images'];
+      $review->user = $user;
+      $review->restaurant = $restaurant;
+    }
+
+    return $reviews;
   }
 
   /**
@@ -81,11 +112,7 @@ class ReviewRepository
    */
   public function getReviews($range)
   {
-    if (!isset($range['count'])) {
-      return Review::all();
-    }
-
-    $count = $range['count'];
+    $count = $range['count'] ?? 10;
     $page = $range['page'] ?? 1;
 
     $reviews = Review::orderBy('created_at', 'desc')
@@ -93,6 +120,72 @@ class ReviewRepository
       ->take($count)
       ->get();
 
+    foreach ($reviews as $review) {
+      $user = self::getReviewUserData($review->user_id);
+      $restaurant = self::getReviewRestaurantData($review->restaurant_id);
+      $images = self::getReviewImages($review->id);
+
+      unset($review->user_id);
+      unset($review->restaurant_id);
+      $review->images = $images['images'];
+      $review->user = $user;
+      $review->restaurant = $restaurant;
+    }
+
     return $reviews;
+  }
+
+  /**
+   * Upload Images
+   * TODO: 이미지 storage 서버로 분리해야 함.
+   */
+  public function uploadImage($image, $review_id)
+  {
+    $storedFileName = $image->store('review_images/' . date('Ym'));
+
+    $uploadedImage = ReviewImages::create([
+      'review_id' => $review_id,
+      'image_url' => $storedFileName,
+    ]);
+
+    return $uploadedImage;
+  }
+
+  /**
+   * Get Review Images
+   */
+  public function getReviewImages($review_id)
+  {
+    $reviewImages = ReviewImages::select('image_url')
+      ->where('review_id', $review_id)
+      ->pluck('image_url')
+      ->toArray();
+
+    $result = [
+      'images' => $reviewImages ?? [],
+    ];
+
+    return $result;
+  }
+
+  public function getReviewUserData($user_id)
+  {
+    return Users::select(
+      'id',
+      'nickname',
+      'profile_image',
+      'bio',
+      'follower',
+      'following'
+    )
+      ->where('id', $user_id)
+      ->first();
+  }
+
+  public function getReviewRestaurantData($restaurant_id)
+  {
+    return Restaurant::select('id', 'score')
+      ->where('id', $restaurant_id)
+      ->first();
   }
 }

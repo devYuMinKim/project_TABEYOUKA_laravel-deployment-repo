@@ -4,14 +4,15 @@ namespace App\Review\Domain\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Profile\Domains\Users;
-use App\Restaurant\Domain\Restaurant;
+use App\Profile\Domains\Entities\Users;
+use App\Restaurant\Domain\Entities\Restaurant;
 
 class Review extends Model
 {
   use HasFactory;
 
   protected $table = 'reviews';
+  protected $primaryKey = 'id';
   protected $fillable = [
     'id',
     'content',
@@ -24,12 +25,12 @@ class Review extends Model
     'updated_at',
   ];
 
-  public function user()
+  public function users()
   {
     return $this->belongsTo(Users::class);
   }
 
-  public function restaurant()
+  public function restaurants()
   {
     return $this->belongsTo(Restaurant::class);
   }

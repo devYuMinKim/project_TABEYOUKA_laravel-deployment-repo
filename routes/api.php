@@ -4,6 +4,8 @@ use App\Auth\Actions\SignoutAction;
 use App\Profile\Actions\UserShowAction;
 use App\Profile\Actions\UserUpdateAction;
 use App\Auth\Actions\LoginAction;
+use App\Review\Actions\GetReviewImagesAction;
+use App\Review\Actions\UploadImageAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Search\Actions\SearchRestaurantsAction;
@@ -128,8 +130,14 @@ Route::post('/review/like', LikeReviewAction::class);
 // 리뷰 공감취소
 Route::post('/review/unlike', UnLikeReviewAction::class);
 
+// 리뷰 사진 조회
+Route::get('/review/images', GetReviewImagesAction::class);
+
+// 리뷰 사진 업로드
+Route::post('/review/image', UploadImageAction::class);
+
 /**
- * 가게 기능
+ * 가게 기능z
  */
 
 // 가게 생성

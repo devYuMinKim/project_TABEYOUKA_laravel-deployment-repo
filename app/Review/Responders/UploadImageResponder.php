@@ -2,7 +2,7 @@
 
 namespace App\Review\Responders;
 
-class CreateReviewResponder
+class UploadImageResponder
 {
   public function respond($result)
   {
