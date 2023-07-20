@@ -47,8 +47,10 @@ Route::get('/search', function (
     $lat = $request->input('lat');
     $lng = $request->input('lng');
     $keyword = $request->input('name');
+    $start = $request->input('start');
+    $count = $request->input('count');
 
-    $result = $action($genre, $area, $lat, $lng, $keyword);
+    $result = $action($genre, $area, $lat, $lng, $keyword, $start, $count);
   } catch (\Exception $e) {
     return response()->json(
       ['error' => 'Error occurred: ' . $e->getMessage()],

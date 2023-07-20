@@ -20,9 +20,9 @@ class SearchRestaurantsAction
     $this->responder = $responder;
   }
 
-  public function __invoke(?string $genre = null, ?string $area = null, ?float $lat = null, ?float $lng = null, ?string $keyword = null) {
+  public function __invoke(?string $genre = null, ?string $area = null, ?float $lat = null, ?float $lng = null, ?string $keyword = null, ?int $start = 1, ?int $count = 10) {
     try {
-      $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $area, $lat, $lng, $keyword);
+      $results = $this->recruitApiService->searchRestaurantsByLocationCode($genre, $area, $lat, $lng, $keyword, $start, $count);
     } catch (\Exception $e) {
       return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
     }
