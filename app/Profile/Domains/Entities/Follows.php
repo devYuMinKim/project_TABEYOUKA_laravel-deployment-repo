@@ -8,8 +8,6 @@ class Follows extends Model
 {
   protected $table = 'Follows';
 
-  protected $primaryKey = ['from_user', 'to_user'];
-
   protected $fillable = ['from_user, to_user'];
 }
 
