@@ -12,6 +12,8 @@ class Restaurant extends Model
 
   protected $table = 'restaurants';
   protected $keyType = 'string';
+
+  protected $primaryKey = 'id';
   protected $fillable = ['id', 'score', 'created_at', 'updated_at'];
 
   public function reviews()
