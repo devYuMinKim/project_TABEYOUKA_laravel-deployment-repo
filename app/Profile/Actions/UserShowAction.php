@@ -23,14 +23,14 @@ class UserShowAction
   {
     try {
       $request->validate([
-        'id' => 'required',
+        'user_id' => 'required',
       ]);
     } catch (ValidationException $e) {
       // 유효성 검사 실패 시
-      $errors = $e->errors();
+      $errors = $e->getMessage();
       return response()->json($errors, 422);
     }
-    $result = $this->showUserData->showUser($request->id);
+    $result = $this->showUserData->showUser($request->user_id);
     return $this->userShowResponder->userShowResponse($result);
   }
 }

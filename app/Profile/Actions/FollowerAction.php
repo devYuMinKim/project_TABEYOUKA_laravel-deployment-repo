@@ -24,14 +24,14 @@ class FollowerAction
   {
     try {
       $request->validate([
-        'id' => 'required',
+        'user_id' => 'required',
       ]);
     } catch (ValidationException $e) {
       $errMsg = $e->errors();
       return response()->json($errMsg, 422);
     }
 
-    $result = $this->followerRepository->getFollower($request->id);
+    $result = $this->followerRepository->getFollower($request->user_id);
     return $this->followerResponder->followerResponse($result);
   }
 }
