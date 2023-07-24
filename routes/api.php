@@ -1,6 +1,8 @@
 <?php
 
 use App\Auth\Actions\SignoutAction;
+use App\Like\Actions\CheckLikeReviewAction;
+use App\Like\Actions\ToggleLikeReviewAction;
 use App\Profile\Actions\UserShowAction;
 use App\Profile\Actions\UserUpdateAction;
 use App\Auth\Actions\LoginAction;
@@ -22,8 +24,6 @@ use App\Review\Actions\GetReviewsAction;
 use App\Review\Actions\GetReviewByAction;
 use App\Review\Actions\CreateReviewAction;
 use App\Review\Actions\GetFollowedUsersReviewsAction;
-use App\Like\Actions\LikeReviewAction;
-use App\Like\Actions\UnLikeReviewAction;
 use App\Profile\Actions\CreateStoryListAction;
 use App\Profile\Actions\EditStoryListAction;
 use App\Profile\Actions\FollowerAction;
@@ -124,11 +124,15 @@ Route::get(
 // 리뷰 생성
 Route::post('/review', CreateReviewAction::class);
 
-// 리뷰 공감
-Route::post('/review/like', LikeReviewAction::class);
+Route::post('/review/like/check', CheckLikeReviewAction::class);
 
-// 리뷰 공감취소
-Route::post('/review/unlike', UnLikeReviewAction::class);
+// // 리뷰 공감
+// Route::post('/review/like', LikeReviewAction::class);
+
+// // 리뷰 공감취소
+// Route::post('/review/unlike', UnLikeReviewAction::class);
+
+Route::post('/review/like', ToggleLikeReviewAction::class);
 
 // 리뷰 사진 조회
 Route::get('/review/images', GetReviewImagesAction::class);
