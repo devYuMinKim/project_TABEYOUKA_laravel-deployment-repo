@@ -23,6 +23,8 @@ class Kernel extends HttpKernel
     \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
   ];
 
+  protected $middlewareExcept = [];
+
   /**
    * The application's route middleware groups.
    *
@@ -66,6 +68,6 @@ class Kernel extends HttpKernel
     'signed' => \App\Http\Middleware\ValidateSignature::class,
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-    'verify.idtoken' => \App\Http\Middleware\VerifyIDToken::class, // Google Sign-In으로 받은 idToken에 대한 유효성 검사
+    'accesstoken' => \App\Http\Middleware\VerifyAccessToken::class,
   ];
 }
