@@ -22,14 +22,13 @@ class FollowingAction
   {
     try {
       $request->validate([
-        'id' => 'required',
+        'user_id' => 'required',
       ]);
     } catch (ValidationException $e) {
       $errMsg = $e->errors();
       return response()->json($errMsg, 422);
     }
-
-    $result = $this->followingRepository->getFollowing($request->id);
+    $result = $this->followingRepository->getFollowing($request->user_id);
     return $this->followingResponder->followingResponse($result);
   }
 }

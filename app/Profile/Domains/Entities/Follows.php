@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Follows extends Model
 {
-  protected $table = 'Follows';
+  protected $table = 'follows';
 
-  protected $fillable = ['from_user, to_user'];
+  protected $fillable = ['from_user', 'to_user'];
 }
 
 ?>
