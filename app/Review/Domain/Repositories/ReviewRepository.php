@@ -75,6 +75,10 @@ class ReviewRepository
   {
     $review = Review::find($id);
 
+    if (!$review) {
+      return null;
+    }
+
     $images = self::getReviewImages($id);
     $user = self::getReviewUserData($review->user_id);
     $restaurant = self::getReviewRestaurantData($review->restaurant_id);

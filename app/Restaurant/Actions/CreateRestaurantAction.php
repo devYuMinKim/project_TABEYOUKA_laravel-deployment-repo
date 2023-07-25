@@ -36,7 +36,7 @@ class CreateRestaurantAction
   public function validateRequest(Request $request)
   {
     $request->validate([
-      'id' => 'required|integer',
+      'id' => 'required|string',
     ]);
   }
 }
