@@ -42,7 +42,7 @@ jobs:
         aws-region: ap-northeast-3
 
     - name: upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./drcloud.tar.gz s3://tabeyouka-codedeploy-bucket/archive/
+      run: aws s3 cp --region ap-northeast-3 ./drcloud.tar.gz s3://tabeyouka-codedeploy-bucket/archive/
 
     - name: deploy with AWS codeDeploy
       run: aws deploy create-deployment
