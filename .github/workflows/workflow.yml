@@ -42,11 +42,11 @@ jobs:
         aws-region: ap-northeast-3
 
     - name: upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./drcloud.tar.gz s3://github-action-codedeploy-s3/archive/
+      run: aws s3 cp --region ap-northeast-2 ./drcloud.tar.gz s3://tabeyouka-codedeploy-bucket/archive/
 
     - name: deploy with AWS codeDeploy
       run: aws deploy create-deployment
         --application-name githubaction-test
         --deployment-config-name CodeDeployDefault.OneAtATime
         --deployment-group-name githubaction-test-group
-        --s3-location bucket=github-action-codedeploy-s3,bundleType=tgz,key=archive/drcloud.tar.gz
+        --s3-location bucket=tabeyouka-codedeploy-bucket,bundleType=tgz,key=archive/drcloud.tar.gz
