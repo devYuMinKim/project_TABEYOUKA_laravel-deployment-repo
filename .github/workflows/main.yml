@@ -28,5 +28,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/tabeyouka_laravel:latest
-            ghcr.io/${{ github.repository_owner }}/tabeyouka_laravel:${{ env.RELEASE_VERSION }}
+            ghcr.io/tabeyouka/tabeyouka-laravel:latest
+            ghcr.io/tabeyouka/tabeyouka-laravel:${{ env.RELEASE_VERSION }}
