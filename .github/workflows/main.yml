@@ -27,6 +27,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/tabeyouka/tabeyouka-laravel:latest
             ghcr.io/tabeyouka/tabeyouka-laravel:${{ env.RELEASE_VERSION }}
