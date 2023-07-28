@@ -4,7 +4,7 @@ namespace App\Auth\Domains\Repositories;
 use App\profile\Domains\Entities\Users;
 use Illuminate\Support\Facades\Http;
 
-class storeUserDataRepository
+class StoreUserDataRepository
 {
   public function storeUserData($code)
   {
