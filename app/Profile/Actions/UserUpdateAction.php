@@ -26,7 +26,6 @@ class UserUpdateAction
         'id' => 'required',
         'nickname' => 'required',
         'bio' => 'required',
-        // 'profile_image' => 'required',
       ]);
     } catch (ValidationException $e) {
       // 유효성 검사 실패 시 처리 로직
@@ -34,19 +33,8 @@ class UserUpdateAction
       return response()->json($errMsg, 422);
       // 오류 메시지를 반환하거나 다른 동작 수행
     }
-    $userData = [
-      'id' => $request->id,
-      'nickname' => $request->nickname,
-      'bio' => $request->bio,
-    ];
 
-    if ($request->profile_image) {
-      $fileName = $request->profile_image->store('public/images/profile');
-      $filePath = 'http://localhost:8000/storage/images/profile/' . basename($fileName);
-      $userData['profile_image'] = $filePath;
-    }
-
-    $updatedUser = $this->updateUserData->updateUserData((object) $userData);
+    $updatedUser = $this->updateUserData->updateUserData($request);
     return $this->userUpdateResponder->userUpdateResponse($updatedUser);
   }
 }
