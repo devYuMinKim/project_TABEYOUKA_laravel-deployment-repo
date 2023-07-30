@@ -4,7 +4,7 @@ namespace App\Auth\Domains\Repositories;
 use App\profile\Domains\Entities\Users;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class storeUserData
+class DestroyUser
 {
   public function destroyUser($id)
   {
