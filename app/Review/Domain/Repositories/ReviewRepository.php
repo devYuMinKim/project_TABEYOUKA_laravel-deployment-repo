@@ -145,11 +145,12 @@ class ReviewRepository
    */
   public function uploadImage($image, $review_id)
   {
-    $storedFileName = $image->store('review_images/' . date('Ym'));
+    $storedFileName = $image->store('review_images/' . date('Ym'), 's3');
+    $storedPath = Storage::disk('s3')->url($storedFileName);
 
     $uploadedImage = ReviewImages::create([
       'review_id' => $review_id,
-      'image_url' => $storedFileName,
+      'image_url' => $storedPath,
     ]);
 
     return $uploadedImage;
