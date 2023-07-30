@@ -38,6 +38,10 @@ class GetReviewByAction
       );
     }
 
+    if ($response === null) {
+      return response()->json(['error' => 'Review not found.'], 404);
+    }
+
     return $this->responder->respond($response);
   }
 
