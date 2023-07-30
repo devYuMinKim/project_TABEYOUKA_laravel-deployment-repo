@@ -79,111 +79,111 @@ Route::get('/search', function (
 Route::post('/user', LoginAction::class);
 
 //idToken 유효성 검증 미들웨어 -> 추후 적용
-Route::middleware('accesstoken')->group(function () {
-  /**
-   * 스토리 관련 기능
-   */
-  // 스토리 리스트 불러오기
-  Route::get('/storylist', GetStoryListAction::class);
-  // 스토리 리스트 아이디를 받아서 특정 스토리 리스트 불러오기 (수정 시 기존 정보 렌더링 사용)
-  Route::get('/storylist/{id}', GetStoryListByIdAction::class);
-  // 스토리 리스트 생성
-  Route::post('/storylist', CreateStoryListAction::class);
-  // 스토리 리스트 수정
-  Route::patch('/storylist', EditStoryListAction::class);
-  // 스토리 리스트 아이디를 받아서 해당 리뷰 목록 반환
-  Route::get('/story', GetStoryAction::class);
-  /**
-   * 지도 관련 기능
-   */
-  // 지도 좌표 반환
-  Route::get('/map', GetRestaurantCoordinatesAction::class);
-  /**
-   * 팔로워, 팔로잉 관련 기능
-   */
-  Route::get('/follower', FollowerAction::class); // 팔로워 불러오기
-  Route::get('/following', FollowingAction::class); // 팔로잉 불러오기
-  Route::post('/follow', FollowAction::class); // 팔로우하기
-  Route::delete('/follow', UnfollowAction::class); // 언팔로우
+// Route::middleware('accesstoken')->group(function () {
+/**
+ * 스토리 관련 기능
+ */
+// 스토리 리스트 불러오기
+Route::get('/storylist', GetStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 특정 스토리 리스트 불러오기 (수정 시 기존 정보 렌더링 사용)
+Route::get('/storylist/{id}', GetStoryListByIdAction::class);
+// 스토리 리스트 생성
+Route::post('/storylist', CreateStoryListAction::class);
+// 스토리 리스트 수정
+Route::patch('/storylist', EditStoryListAction::class);
+// 스토리 리스트 아이디를 받아서 해당 리뷰 목록 반환
+Route::get('/story', GetStoryAction::class);
+/**
+ * 지도 관련 기능
+ */
+// 지도 좌표 반환
+Route::get('/map', GetRestaurantCoordinatesAction::class);
+/**
+ * 팔로워, 팔로잉 관련 기능
+ */
+Route::get('/follower', FollowerAction::class); // 팔로워 불러오기
+Route::get('/following', FollowingAction::class); // 팔로잉 불러오기
+Route::post('/follow', FollowAction::class); // 팔로우하기
+Route::delete('/follow', UnfollowAction::class); // 언팔로우
 
-  /**
-   * 사용자 관련 기능
-   */
-  Route::get('/user', UserShowAction::class);
-  Route::patch('/user', UserUpdateAction::class);
-  Route::delete('/user', SignoutAction::class);
+/**
+ * 사용자 관련 기능
+ */
+Route::get('/user', UserShowAction::class);
+Route::patch('/user', UserUpdateAction::class);
+Route::delete('/user', SignoutAction::class);
 
-  /**
-   * 리뷰 기능
-   */
+/**
+ * 리뷰 기능
+ */
 
-  // 리뷰 범위 조회
-  Route::get('/reviews', GetReviewsAction::class);
+// 리뷰 범위 조회
+Route::get('/reviews', GetReviewsAction::class);
 
-  // 리뷰 상세 조회 (id, user_id)
-  Route::get('/review', GetReviewByAction::class);
+// 리뷰 상세 조회 (id, user_id)
+Route::get('/review', GetReviewByAction::class);
 
-  // 팔로우한 사용자의 리뷰 조회
-  Route::get(
-    '/reviews/followed/{fromUserId}',
-    GetFollowedUsersReviewsAction::class
-  );
+// 팔로우한 사용자의 리뷰 조회
+Route::get(
+  '/reviews/followed/{fromUserId}',
+  GetFollowedUsersReviewsAction::class
+);
 
-  // 리뷰 생성
-  Route::post('/review', CreateReviewAction::class);
+// 리뷰 생성
+Route::post('/review', CreateReviewAction::class);
 
-  Route::post('/review/like/check', CheckLikeReviewAction::class);
+Route::post('/review/like/check', CheckLikeReviewAction::class);
 
-  // // 리뷰 공감
-  // Route::post('/review/like', LikeReviewAction::class);
+// // 리뷰 공감
+// Route::post('/review/like', LikeReviewAction::class);
 
-  // // 리뷰 공감취소
-  // Route::post('/review/unlike', UnLikeReviewAction::class);
+// // 리뷰 공감취소
+// Route::post('/review/unlike', UnLikeReviewAction::class);
 
-  Route::post('/review/like', ToggleLikeReviewAction::class);
+Route::post('/review/like', ToggleLikeReviewAction::class);
 
-  // 리뷰 사진 조회
-  Route::get('/review/images', GetReviewImagesAction::class);
+// 리뷰 사진 조회
+Route::get('/review/images', GetReviewImagesAction::class);
 
-  // 리뷰 사진 업로드
-  Route::post('/review/image', UploadImageAction::class);
+// 리뷰 사진 업로드
+Route::post('/review/image', UploadImageAction::class);
 
-  /**
-   * 가게 기능
-   */
+/**
+ * 가게 기능
+ */
 
-  // 가게 생성
-  Route::post('/restaurant', CreateRestaurantAction::class);
+// 가게 생성
+Route::post('/restaurant', CreateRestaurantAction::class);
 
-  /**
-   * 사용자 위치 기반 가게 검색 기능
-   */
+/**
+ * 사용자 위치 기반 가게 검색 기능
+ */
 
-  Route::get('/search/nby', function (
-    Request $request,
-    FindNearbyRestaurantsAction $action,
-    FindNearbyRestaurantsResponder $responder
-  ) {
-    $lat = floatval($request->input('lat'));
-    $lng = floatval($request->input('lng'));
+Route::get('/search/nby', function (
+  Request $request,
+  FindNearbyRestaurantsAction $action,
+  FindNearbyRestaurantsResponder $responder
+) {
+  $lat = floatval($request->input('lat'));
+  $lng = floatval($request->input('lng'));
 
-    $range = 5; // 기본 검색 범위 (5km)
+  $range = 5; // 기본 검색 범위 (5km)
 
-    $result = $action($lat, $lng, $range);
-    return $responder($result);
-  });
-
-  /**
-   * 사용자 성향에 따른 가게 추천 기능
-   */
-
-  Route::get('/recommend/{user_id}', function (
-    string $user_id,
-    RecruitApiService $recruitApiService,
-    RecommendRestaurantsAction $action,
-    RecommendRestaurantsResponder $responder
-  ) {
-    $restaurants = $action($user_id, $recruitApiService);
-    return $responder($restaurants);
-  });
+  $result = $action($lat, $lng, $range);
+  return $responder($result);
 });
+
+/**
+ * 사용자 성향에 따른 가게 추천 기능
+ */
+
+Route::get('/recommend/{user_id}', function (
+  string $user_id,
+  RecruitApiService $recruitApiService,
+  RecommendRestaurantsAction $action,
+  RecommendRestaurantsResponder $responder
+) {
+  $restaurants = $action($user_id, $recruitApiService);
+  return $responder($restaurants);
+});
+// });

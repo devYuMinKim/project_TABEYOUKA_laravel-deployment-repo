@@ -23,9 +23,8 @@ class VerifyAccessToken
       $errMsg = $e->getMessage();
       return response()->json(['error' => $errMsg], 401);
     }
-    $users = Users::where('id', $response['email'])->first();
 
-    if ($users && $response['expires_in'] > 0) {
+    if ($response['expires_in'] > 0) {
       return $next($request);
     } else {
       // 토큰이 유효하지 않은 경우 처리할 작업 수행
