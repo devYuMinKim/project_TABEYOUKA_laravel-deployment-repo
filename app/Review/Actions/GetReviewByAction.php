@@ -23,11 +23,7 @@ class GetReviewByAction
     if (isset($review['review_id'])) {
       $response = $this->repository->getReviewById($review['review_id']);
     } elseif (isset($review['user_id'])) {
-      $range = $request->only(['count', 'page']);
-      $response = $this->repository->getReviewsByUserIds(
-        [$review['user_id']],
-        $range
-      );
+      $response = $this->repository->getReviewsByUserIds([$review['user_id']]);
     } elseif (isset($review['restaurant_id'])) {
       $response = $this->repository->getReviewsByRestaurantId([
         $review['restaurant_id'],

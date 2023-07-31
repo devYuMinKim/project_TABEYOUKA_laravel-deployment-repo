@@ -98,14 +98,9 @@ class ReviewRepository
   /**
    * Get reviews by user ids
    */
-  public function getReviewsByUserIds(array $userIds, $range)
+  public function getReviewsByUserIds(array $userIds)
   {
-    $count = $range['count'] ?? 10;
-    $page = $range['page'] ?? 1;
-
     $review_ids = Review::whereIn('user_id', $userIds)
-      ->skip($count * ($page - 1))
-      ->take($count)
       ->orderBy('created_at', 'desc')
       ->pluck('id')
       ->toArray();

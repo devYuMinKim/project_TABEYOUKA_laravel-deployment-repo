@@ -13,7 +13,7 @@ class VerifyAccessToken
 {
   public function handle(Request $request, Closure $next)
   {
-    $accessToken = $request->header('Authorization');
+    $accessToken = $request->access_token;
     try {
       // token에 대한 유효성을 검증하고 그에 대한 정보를 반환
       $response = Http::get('https://oauth2.googleapis.com/tokeninfo', [
