@@ -1,11 +1,18 @@
 version: 0.0
 os: linux
-
 files:
   - source: /
-    destination: /home/ubuntu/tabeyouka-deploy
+    destination: /home/ubuntu/project_TABEYOUKA_docker-compose-repo/
+    overwrite: yes
+
 permissions:
-  - object: /home/ubuntu/tabeyouka-deploy
+  - object: /
+    pattern: '**'
     owner: ubuntu
     group: ubuntu
-    mode: 755
+
+hooks:
+  ApplicationStart:
+    - location: deploy.sh
+      timeout: 60
+      runas: ubuntu
