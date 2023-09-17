@@ -15,20 +15,34 @@ class FindNearbyRestaurantsAction
   protected $recruitApiService;
   protected $responder;
 
-  public function __construct(RecruitApiService $recruitApiService, FindNearbyRestaurantsResponder $responder)
-  {
+  public function __construct(
+    RecruitApiService $recruitApiService,
+    FindNearbyRestaurantsResponder $responder
+  ) {
     $this->recruitApiService = $recruitApiService;
     $this->responder = $responder;
   }
 
-  public function __invoke(float $latitude, float $longitude, float $range, ?string $keyword = null)
-  {
+  public function __invoke(
+    float $latitude,
+    float $longitude,
+    float $range,
+    ?string $keyword = null
+  ) {
     try {
-      $restaurants = $this->recruitApiService->searchRestaurantsByUserLocation($latitude, $longitude, $range, $keyword);
+      $restaurants = $this->recruitApiService->searchRestaurantsByUserLocation(
+        $latitude,
+        $longitude,
+        $range,
+        $keyword
+      );
     } catch (\Exception $e) {
-      return response()->json(['error' => 'Error occurred: ' . $e->getMessage()], 500);
+      return response()->json(
+        ['error' => 'Error occurred: ' . $e->getMessage()],
+        500
+      );
     }
-    
-    return $this->responder($restaurants);
+
+    return $this->responder->__invoke($restaurants);
   }
 }

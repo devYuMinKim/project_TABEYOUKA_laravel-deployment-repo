@@ -23,7 +23,11 @@ class GetReviewByAction
     if (isset($review['review_id'])) {
       $response = $this->repository->getReviewById($review['review_id']);
     } elseif (isset($review['user_id'])) {
-      $response = $this->repository->getReviewsByUserIds([$review['user_id']]);
+      $range = $request->only(['count', 'page']);
+      $response = $this->repository->getReviewsByUserIds(
+        [$review['user_id']],
+        $range
+      );
     } elseif (isset($review['restaurant_id'])) {
       $response = $this->repository->getReviewsByRestaurantId([
         $review['restaurant_id'],
@@ -36,6 +40,10 @@ class GetReviewByAction
         ],
         400
       );
+    }
+
+    if ($response === null) {
+      return response()->json(['error' => 'Review not found.'], 404);
     }
 
     return $this->responder->respond($response);

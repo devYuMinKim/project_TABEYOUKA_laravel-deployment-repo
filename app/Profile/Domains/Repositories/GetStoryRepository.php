@@ -10,20 +10,24 @@ use App\Review\Domain\Repositories\ReviewRepository;
 class GetStoryRepository
 {
   public function __construct(
-    protected ReviewRepository $reviewRepository, 
-    protected HotpepperRestaurantRepository $hotpepperRestaurantRepository) {
-
+    protected ReviewRepository $reviewRepository,
+    protected HotpepperRestaurantRepository $hotpepperRestaurantRepository
+  ) {
   }
   public function store($id)
   {
-    $reviewIds = Stories::where('story_list_id', $id)->select('review_id')->get();
-    $reviews = array();
+    $reviewIds = Stories::where('story_list_id', $id)
+      ->select('review_id')
+      ->get();
+    $reviews = [];
     foreach ($reviewIds as $value) {
-      $review = $this->reviewRepository->getReviewById($value->review_id);
-      $restaurant = $this->hotpepperRestaurantRepository->find($review->restaurant_id);
+      $reviewId = $value->review_id;
+      $review = $this->reviewRepository->getReviewById($reviewId);
+      $restaurantId = $review->restaurant->id;
+      $restaurant = $this->hotpepperRestaurantRepository->find($restaurantId);
       $review->restaurant_name = $restaurant['shop'][0]['name'];
       array_push($reviews, $review);
-    };
+    }
     return $reviews;
   }
 }

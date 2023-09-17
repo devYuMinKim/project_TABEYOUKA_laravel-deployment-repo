@@ -13,7 +13,7 @@ class VerifyAccessToken
 {
   public function handle(Request $request, Closure $next)
   {
-    $accessToken = $request->access_token;
+    $accessToken = $request->header('Authorization');
     try {
       // token에 대한 유효성을 검증하고 그에 대한 정보를 반환
       $response = Http::get('https://oauth2.googleapis.com/tokeninfo', [
@@ -23,9 +23,8 @@ class VerifyAccessToken
       $errMsg = $e->getMessage();
       return response()->json(['error' => $errMsg], 401);
     }
-    $users = Users::where('id', $response['email'])->first();
 
-    if ($users && $response['expires_in'] > 0) {
+    if ($response['expires_in'] > 0) {
       return $next($request);
     } else {
       // 토큰이 유효하지 않은 경우 처리할 작업 수행

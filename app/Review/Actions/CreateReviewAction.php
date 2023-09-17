@@ -35,7 +35,7 @@ class CreateReviewAction
     $request->validate([
       'content' => 'string|nullable',
       'score' => 'integer|nullable',
-      'restaurant_id' => 'required|integer',
+      'restaurant_id' => 'required|string',
       'user_id' => 'required|string',
     ]);
   }

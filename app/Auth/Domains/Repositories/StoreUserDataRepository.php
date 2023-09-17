@@ -4,7 +4,7 @@ namespace App\Auth\Domains\Repositories;
 use App\profile\Domains\Entities\Users;
 use Illuminate\Support\Facades\Http;
 
-class storeUserDataRepository
+class StoreUserDataRepository
 {
   public function storeUserData($code)
   {
@@ -16,17 +16,14 @@ class storeUserDataRepository
       'grant_type' => 'authorization_code',
     ]);
 
-    $tokenInfo = Http::asForm()->get(
-      'https://oauth2.googleapis.com/tokeninfo',
-      [
-        'access_token' => $response['access_token'], // 구글에서 받은 idToken
-      ]
-    );
+    $tokenInfo = Http::post('https://oauth2.googleapis.com/tokeninfo', [
+      'id_token' => $response['id_token'], // 구글에서 받은 idToken
+    ]);
 
     $email = $tokenInfo['email'];
-    $imagePath = '  '; // 배포시 경로 수정 필요
+    $imagePath = 'asdf'; // 배포시 경로 수정 필요
 
-    $user = Users::where('id', $email);
+    $user = Users::where('id', $email)->first();
 
     if (!$user) {
       // 사용자 정보 생성
@@ -40,10 +37,11 @@ class storeUserDataRepository
     }
 
     $tokens = [
-      'id' => $tokenInfo['email'],
+      'id' => $email,
       'access_token' => $response['access_token'],
       'refresh_token' => $response['refresh_token'],
     ];
+
     return $tokens;
   }
 }
