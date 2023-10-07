@@ -1,4 +1,13 @@
 ---
+name: "🎨 \bREFACTOR"
+about: "\bRefactor 작업 사항을 입력해주세요."
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+---
 name: Refactor 이슈 템플릿
 about: 코드 개선 요청을 위한 템플릿
 ---
