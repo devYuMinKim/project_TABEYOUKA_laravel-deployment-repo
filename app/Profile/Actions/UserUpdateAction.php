@@ -25,7 +25,6 @@ class UserUpdateAction
       $request->validate([
         'id' => 'required',
         'nickname' => 'required',
-        'bio' => 'required',
       ]);
     } catch (ValidationException $e) {
       // 유효성 검사 실패 시 처리 로직
