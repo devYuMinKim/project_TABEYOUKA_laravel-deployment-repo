@@ -163,8 +163,11 @@ class ReviewRepository
    */
   public function uploadImage($image, $review_id)
   {
-    $storedFileName = $image->store('review_images/' . date('Ym'), 's3');
-    $storedPath = Storage::disk('s3')->url($storedFileName);
+    // $storedFileName = $image->store('review_images/' . date('Ym'), 's3');
+    // $storedPath = Storage::disk('s3')->url($storedFileName);
+
+    $storedFileName = $image->store('public/images/profile');
+    $storedPath = 'http://localhost:8000/storage/images/profile/'.basename($storedFileName);
 
     $uploadedImage = ReviewImages::create([
       'review_id' => $review_id,
