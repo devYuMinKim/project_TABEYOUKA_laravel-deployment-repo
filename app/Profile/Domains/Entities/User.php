@@ -3,12 +3,12 @@
 namespace App\Profile\Domains\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class Users extends Model
+class User extends Authenticatable
 {
-  use HasFactory;
-  protected $factory = \Database\Factories\UsersFactory::class;
+  use HasFactory, HasApiTokens;
 
   protected $table = 'users';
   protected $primaryKey = 'id';

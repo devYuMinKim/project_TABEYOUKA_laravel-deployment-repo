@@ -1,15 +1,14 @@
 <?php
 namespace App\Profile\Domains\Repositories;
 
-use App\Profile\Domains\Entities\Users;
+use App\Profile\Domains\Entities\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Storage;
 class UpdateUserData
 {
   public function updateUserData($userData)
   {
     try {
-      $user = Users::findOrFail($userData->id);
+      $user = User::findOrFail($userData->id);
     } catch (ModelNotFoundException $e) {
       return response()->json($e, 404);
     }

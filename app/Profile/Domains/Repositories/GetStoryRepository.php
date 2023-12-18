@@ -2,8 +2,7 @@
 
 namespace App\Profile\Domains\Repositories;
 
-use App\Profile\Domains\Entities\Stories;
-use App\Restaurant\Actions\FindRestaurantByIdAction;
+use App\Profile\Domains\Entities\Story;
 use App\Restaurant\Domain\Repositories\HotpepperRestaurantRepository;
 use App\Review\Domain\Repositories\ReviewRepository;
 
@@ -16,7 +15,7 @@ class GetStoryRepository
   }
   public function store($id)
   {
-    $reviewIds = Stories::where('story_list_id', $id)
+    $reviewIds = Story::where('story_list_id', $id)
       ->select('review_id')
       ->get();
     $reviews = [];

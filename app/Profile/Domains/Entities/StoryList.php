@@ -4,7 +4,7 @@ namespace App\Profile\Domains\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StoryLists extends Model
+class StoryList extends Model
 {
   protected $table = 'story_lists';
 
