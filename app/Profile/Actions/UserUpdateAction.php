@@ -2,21 +2,17 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\updateUserData;
-use App\Profile\Responders\UserUpdateResponder;
+use App\Profile\Domains\Repositories\UpdateUserDataRepository as Repository;
+use App\Profile\Responders\UserUpdateResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserUpdateAction
 {
-  protected $updateUserData, $userUpdateResponder;
-
   public function __construct(
-    updateUserData $updateUserData,
-    UserUpdateResponder $userUpdateResponder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
-    $this->updateUserData = $updateUserData;
-    $this->userUpdateResponder = $userUpdateResponder;
   }
 
   public function __invoke(Request $request)
@@ -33,8 +29,8 @@ class UserUpdateAction
       // 오류 메시지를 반환하거나 다른 동작 수행
     }
 
-    $updatedUser = $this->updateUserData->updateUserData($request);
-    return $this->userUpdateResponder->userUpdateResponse($updatedUser);
+    $updatedUser = $this->repository->updateUserData($request);
+    return $this->responder->userUpdateResponse($updatedUser);
   }
 }
 

@@ -2,16 +2,16 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\GetStoryRepository;
-use App\Profile\Responders\GetStoryResponder;
+use App\Profile\Domains\Repositories\GetStoryRepository as Repository;
+use App\Profile\Responders\GetStoryResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class GetStoryAction
 {
   public function __construct(
-    protected GetStoryRepository $getStoryRepository,
-    protected GetStoryResponder $getStoryResponder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
 
@@ -27,8 +27,8 @@ class GetStoryAction
     }
 
 
-    $result = $this->getStoryRepository->store($request->story_list_id);
-    return $this->getStoryResponder->getStoryResponse($result);
+    $result = $this->repository->store($request->story_list_id);
+    return $this->responder->getStoryResponse($result);
   }
 }
 

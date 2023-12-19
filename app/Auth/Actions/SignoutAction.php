@@ -2,19 +2,15 @@
 
 namespace App\Auth\Actions;
 
-use App\profile\Domains\Entities\Users;
-use App\Auth\Responders\SignoutResponder;
+use App\Auth\Domains\Repositories\DestroyUser as Repository;
+use App\Auth\Responders\SignoutResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class SignoutAction
 {
-  protected $users, $signoutResponder;
-
-  public function __construct(Users $users, SignoutResponder $signoutResponder)
+  public function __construct(protected Repository $repository, protected Responder $responder)
   {
-    $this->users = $users;
-    $this->signoutResponder = $signoutResponder;
   }
 
   public function __invoke(Request $request)
@@ -29,8 +25,8 @@ class SignoutAction
       return response()->json($errors, 422);
     }
 
-    $result = $this->users->destroyUser($request->id);
-    return $this->signoutResponder->signoutResponse($result);
+    $result = $this->repository->destroyUser($request['id']);
+    return $this->responder->signoutResponse($result);
   }
 }
 

@@ -2,17 +2,16 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\AddFollowRepository;
-use App\Profile\Responders\FollowResponder;
+use App\Profile\Domains\Repositories\AddFollowRepository as Repository;
+use App\Profile\Responders\FollowResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class FollowAction
 {
-  protected $followRepository, $followResponder;
   public function __construct(
-    protected AddFollowRepository $repository,
-    protected FollowResponder $responder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
 

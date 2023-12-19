@@ -5,7 +5,7 @@ namespace App\Profile\Domains\Repositories;
 use App\Profile\Domains\Entities\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ShowUserData
+class ShowUserDataRepository
 {
   public function showUser($id)
   {
