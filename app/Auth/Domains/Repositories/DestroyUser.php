@@ -1,7 +1,7 @@
 <?php
 namespace App\Auth\Domains\Repositories;
 
-use App\profile\Domains\Entities\Users;
+use App\profile\Domains\Entities\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DestroyUser
@@ -11,7 +11,7 @@ class DestroyUser
     // 사용자 정보 삭제
     try {
       // 현재 클래스를 가리킴
-      $user = Users::findOrFail($id);
+      $user = User::findOrFail($id);
     } catch (ModelNotFoundException $e) {
       return response()->json(['error' => 'User not found'], 404);
     }

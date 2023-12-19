@@ -2,15 +2,15 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\UnfollowRepository;
-use App\Profile\Responders\UnfollowResponder;
+use App\Profile\Domains\Repositories\UnfollowRepository as Repository;
+use App\Profile\Responders\UnfollowResponder as Responder;
 use Illuminate\Http\Request;
 
 class UnfollowAction
 {
   public function __construct(
-    protected UnfollowRepository $repository,
-    protected UnfollowResponder $responder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
   }
 

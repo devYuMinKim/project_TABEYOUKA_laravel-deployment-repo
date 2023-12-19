@@ -2,20 +2,17 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\FollowingRepository;
-use App\Profile\Responders\FollowingResponder;
+use App\Profile\Domains\Repositories\FollowingRepository as Repository;
+use App\Profile\Responders\FollowingResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class FollowingAction
 {
-  protected $followingRepository, $followingResponder;
   public function __construct(
-    FollowingRepository $followingRepository,
-    FollowingResponder $followingResponder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
-    $this->followingRepository = $followingRepository;
-    $this->followingResponder = $followingResponder;
   }
 
   public function __invoke(Request $request)
@@ -28,8 +25,8 @@ class FollowingAction
       $errMsg = $e->errors();
       return response()->json($errMsg, 422);
     }
-    $result = $this->followingRepository->getFollowing($request->user_id);
-    return $this->followingResponder->followingResponse($result);
+    $result = $this->repository->getFollowing($request->user_id);
+    return $this->responder->followingResponse($result);
   }
 }
 

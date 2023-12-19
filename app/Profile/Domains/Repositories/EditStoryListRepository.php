@@ -4,6 +4,7 @@ namespace App\Profile\Domains\Repositories;
 
 use App\Profile\Domains\Entities\Story;
 use App\Profile\Domains\Entities\StoryList;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EditStoryListRepository
 {
@@ -11,7 +12,7 @@ class EditStoryListRepository
   {
     try {
       StoryList::findOrFail($data->id)->update(['story_name' => $data->story_name]);
-    } catch (\Exception $e) {
+    } catch (ModelNotFoundException $e) {
       $errMsg = $e->getMessage();
       return response()->json(['error' => $errMsg]);
     }
@@ -24,6 +25,7 @@ class EditStoryListRepository
           'review_id' => $reviewId,
         ]);
     }
+    return response()->json(['message' => 'Story updated successfully'], 200);
   }
 }
 

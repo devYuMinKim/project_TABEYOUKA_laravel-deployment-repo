@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Restaurant\Domain\Entities\Restaurant;
 use App\Review\Domain\Entities\Review;
 use App\Review\Domain\Entities\ReviewImages;
-use App\Profile\Domains\Entities\Users;
+use App\Profile\Domains\Entities\User;
 use Illuminate\Support\Facades\Storage;
 
 class ReviewRepository
@@ -196,7 +196,7 @@ class ReviewRepository
 
   public function getReviewUserData($user_id)
   {
-    return Users::select(
+    return User::select(
       'id',
       'nickname',
       'profile_image',

@@ -1,18 +1,19 @@
 <?php
 namespace App\Auth\Domains\Repositories;
 
-use App\profile\Domains\Entities\Users;
+use App\profile\Domains\Entities\User;
 use Illuminate\Support\Facades\Http;
 
 class StoreUserDataRepository
 {
   public function storeUserData($code)
   {
+    // get ACCESS & REFRESH token
     $response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
       'code' => $code,
       'client_id' => env('GOOGLE_CLIENT_ID'),
       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-      'redirect_uri' => 'http://localhost:5173',
+      'redirect_uri' => env('GOOGLE_REDIRECT_URI'),
       'grant_type' => 'authorization_code',
     ]);
 
@@ -21,16 +22,14 @@ class StoreUserDataRepository
     ]);
 
     $email = $tokenInfo['email'];
-    $imagePath = 'asdf'; // 배포시 경로 수정 필요
 
-    $user = Users::where('id', $email)->first();
+    $user = User::where('id', $email)->first();
 
     if (!$user) {
       // 사용자 정보 생성
-      $user = Users::create([
+      $user = User::create([
         'id' => $email,
         'nickname' => 'User' . uniqid(),
-        'profile_image' => $imagePath,
         'bio' => ' ',
       ]);
       $user->save();

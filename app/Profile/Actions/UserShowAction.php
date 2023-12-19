@@ -2,21 +2,18 @@
 
 namespace App\Profile\Actions;
 
-use App\Profile\Domains\Repositories\ShowUserData;
-use App\Profile\Responders\UserShowResponder;
+use App\Profile\Domains\Repositories\ShowUserDataRepository as Repository;
+use App\Profile\Responders\UserShowResponder as Responder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserShowAction
 {
-  protected $showUserData, $userShowResponder;
 
   public function __construct(
-    ShowUserData $showUserData,
-    UserShowResponder $userShowResponder
+    protected Repository $repository,
+    protected Responder $responder
   ) {
-    $this->showUserData = $showUserData;
-    $this->userShowResponder = $userShowResponder;
   }
 
   public function __invoke(Request $request)
@@ -30,8 +27,8 @@ class UserShowAction
       $errors = $e->getMessage();
       return response()->json($errors, 422);
     }
-    $result = $this->showUserData->showUser($request->user_id);
-    return $this->userShowResponder->userShowResponse($result);
+    $result = $this->repository->showUser($request->user_id);
+    return $this->responder->userShowResponse($result);
   }
 }
 

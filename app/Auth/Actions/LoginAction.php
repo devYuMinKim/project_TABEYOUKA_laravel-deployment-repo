@@ -3,14 +3,12 @@
 namespace App\Auth\Actions;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use App\Auth\Domains\Repositories\storeUserDataRepository as Repository;
 use App\Auth\Responders\LoginResponder as Responder;
 
 class LoginAction
 {
-  protected $users, $loginResponder;
   public function __construct(
     protected Repository $repository,
     protected Responder $responder
