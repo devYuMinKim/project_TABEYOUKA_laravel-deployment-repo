@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Profile\Domains\Repositories;
-use App\Profile\Domains\Entities\Follows;
+use App\Profile\Domains\Entities\Follow;
 use Illuminate\Database\QueryException;
 
 class UnfollowRepository
@@ -9,7 +9,7 @@ class UnfollowRepository
   public function delete($data)
   {
     try {
-      $result = Follows::where('from_user', $data->id)
+      $result = Follow::where('from_user', $data->id)
         ->where('to_user', $data->follow_id)
         ->delete();
     } catch (QueryException $e) {

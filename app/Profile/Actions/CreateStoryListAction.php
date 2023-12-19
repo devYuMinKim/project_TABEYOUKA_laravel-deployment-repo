@@ -4,7 +4,6 @@ namespace App\Profile\Actions;
 
 use App\Profile\Domains\Repositories\CreateStoryListRepository;
 use App\Profile\Responders\CreateStoryListResponder;
-use App\Review\Responders\CreateReviewResponder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
