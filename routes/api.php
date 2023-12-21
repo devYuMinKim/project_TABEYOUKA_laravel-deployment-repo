@@ -83,7 +83,7 @@ Route::post('/user', LoginAction::class);
 /**
  * 스토리 관련 기능
  */
-// 스토리 리스트 불러오기
+// 유저의 스토리 리스트 (제목 및 메인 사진)
 Route::get('/storylist', GetStoryListAction::class);
 // 스토리 리스트 아이디를 받아서 특정 스토리 리스트 불러오기 (수정 시 기존 정보 렌더링 사용)
 Route::get('/storylist/{id}', GetStoryListByIdAction::class);

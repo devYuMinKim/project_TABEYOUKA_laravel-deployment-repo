@@ -11,7 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('review_story_list', function (Blueprint $table) {
-      $table->foreignId('list_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+      $table->foreignId('story_list_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
       $table->foreignId('review_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
       $table->timestamps();
     });
@@ -22,6 +22,9 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('review_story_list');
+    Schema::table('review_story_list', function(Blueprint $table) {
+      $table->dropUnique(['review_id', 'story_list_id']);
+      $table->dropIfExists();
+    });
   }
 };

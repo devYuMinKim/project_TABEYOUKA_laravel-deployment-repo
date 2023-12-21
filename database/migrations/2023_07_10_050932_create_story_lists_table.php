@@ -13,7 +13,9 @@ return new class extends Migration {
     Schema::create('story_lists', function (Blueprint $table) {
       $table->id();
       $table->string('story_name', 10);
-      $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+      $table->string('user_id');
+      $table->foreign('user_id')
+        ->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
       $table->timestamps();
     });
   }
@@ -23,6 +25,9 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('story_lists');
+    Schema::table('story_lists', function(Blueprint $table) {
+      $table->dropForeign(['user_id']);
+      $table->dropIfExists();
+    });
   }
 };

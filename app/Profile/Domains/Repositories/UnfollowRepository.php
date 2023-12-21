@@ -9,9 +9,7 @@ class UnfollowRepository
   public function delete($data)
   {
     try {
-      $result = Follow::where('from_user', $data->id)
-        ->where('to_user', $data->follow_id)
-        ->delete();
+      $result = Follow::where(['from_user', $data->id, 'to_user', $data->follow_id])->delete();
     } catch (QueryException $e) {
       $errMsg = $e->getMessage();
       return response($errMsg);

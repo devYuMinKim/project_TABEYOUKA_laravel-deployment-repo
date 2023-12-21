@@ -2,9 +2,10 @@
 
 namespace App\Review\Domain\Entities;
 
+use App\Profile\Domains\Entities\StoryList;
+use App\Profile\Domains\Entities\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Profile\Domains\Entities\Users;
 use App\Restaurant\Domain\Entities\Restaurant;
 
 class Review extends Model
@@ -27,11 +28,15 @@ class Review extends Model
 
   public function users()
   {
-    return $this->belongsTo(Users::class);
+    return $this->belongsTo(User::class);
   }
 
   public function restaurants()
   {
     return $this->belongsTo(Restaurant::class);
+  }
+
+  public function storyLists() {
+    return $this->belongsToMany(StoryList::class);
   }
 }
