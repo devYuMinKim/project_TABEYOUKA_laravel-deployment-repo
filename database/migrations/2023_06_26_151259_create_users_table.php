@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->string('id', 255)->primary();
-            $table->string('nickname', 20)->nullable();
+            $table->string('nickname', 20)->unique();
+            $table->string('profile_image')->nullable();
+            $table->string('bio')->nullable();
+            $table->unsignedBigInteger('reviews')->default(0);
+            $table->unsignedBigInteger('follower')->default(0);
+            $table->unsignedBigInteger('following')->default(0);
             $table->timestamps();
         });
     }
@@ -23,6 +28,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+      Schema::table('users', function(Blueprint $table) {
+        $table->dropUnique('nickname');
+        $table->dropIfExists();
+      });
     }
 };

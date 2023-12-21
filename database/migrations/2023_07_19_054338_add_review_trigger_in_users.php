@@ -11,13 +11,7 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::table('users', function (Blueprint $table) {
-      $table
-        ->unsignedBigInteger('reviews')
-        ->after('bio')
-        ->default(0);
-    });
-
+    // レビューが追加されると、トリガー実行
     DB::unprepared('
         CREATE TRIGGER update_user_reviews_after_insert AFTER INSERT ON reviews
         FOR EACH ROW
@@ -37,8 +31,5 @@ return new class extends Migration {
   public function down(): void
   {
     DB::unprepared('DROP TRIGGER IF EXISTS update_user_reviews_after_insert');
-    Schema::table('users', function (Blueprint $table) {
-      $table->dropColumn('reviews');
-    });
   }
 };

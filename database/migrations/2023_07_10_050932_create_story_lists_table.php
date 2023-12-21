@@ -12,13 +12,8 @@ return new class extends Migration {
   {
     Schema::create('story_lists', function (Blueprint $table) {
       $table->id();
-      $table->string('user_id', 255);
-      $table
-        ->foreign('user_id')
-        ->references('id')
-        ->on('users')
-        ->onDelete('cascade');
       $table->string('story_name', 10);
+      $table->foreignId('user_id')->constrained()->cascadeOnDelete();
       $table->timestamps();
     });
   }

@@ -10,11 +10,10 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::table('users', function (Blueprint $table) {
-      $table
-        ->string('bio')
-        ->nullable()
-        ->after('profile_image');
+    Schema::create('review_story_list', function (Blueprint $table) {
+      $table->foreignId('list_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+      $table->foreignId('review_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+      $table->timestamps();
     });
   }
 
@@ -23,8 +22,6 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::table('users', function (Blueprint $table) {
-      $table->dropColumn('profile_image');
-    });
+    Schema::dropIfExists('review_story_list');
   }
 };
