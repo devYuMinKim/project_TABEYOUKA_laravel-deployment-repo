@@ -28,9 +28,36 @@ class RecruitApiService
         return null;
     }
 
+    private function validateLatitudeAndLongitude(?float $lat = null, ?float $lng = null)
+    {
+        if ($lat !== null && ($lat < -90 || $lat > 90)) {
+            throw new \InvalidArgumentException("Latitude value must be between -90 and 90");
+        }
+        if ($lng !== null && ($lng < -180 || $lng > 180)) {
+            throw new \InvalidArgumentException("Longitude value must be between -180 and 180");
+        }
+    }
+
+    private function prepareParams(array $options)
+    {
+        $params = [
+            "key" => env("HOTPEPPER_KEY"),
+            "format" => "json",
+        ];
+
+        return array_merge($params, $options);
+    }
+
     /**
-     * 지역 코드를 기반으로 한 식당 검색 메서드
-     * - 장르, 대형 지역, 중형 지역, 위도, 경도, 검색 키워드 선택 가능
+     * 地域コードに基づくレストラン検索メソッド
+     * ジャンル、大地域、中地域、緯度、経度、検索キーワード選択可能
+     * @param string|null $genre
+     * @param string|null $area
+     * @param float|null $lat
+     * @param float|null $lng
+     * @param string|null $keyword
+     * @param int|null $start
+     * @param int|null $count
      */
     public function searchRestaurantsByLocationCode(
         ?string $genre = null,
@@ -41,70 +68,75 @@ class RecruitApiService
         ?int $start = 1,
         ?int $count = 10,
     ) {
-        $params = [
-            "key" => env("HOTPEPPER_KEY"),
-            "format" => "json",
-        ];
+        $this->validateLatitudeAndLongitude($lat, $lng);
 
-        if ($genre !== null) {
-            $params["genre"] = $genre;
-        }
+        $options = $this->createOptionsArray($genre, $area, $lat, $lng, $keyword, $start, $count);
+
+        $params = $this->prepareParams($options);
+
+        $params = $this->handleAreaCode($params, $area);
+
+        $this->validateParams($params);
+
+        $results = $this->handleApiCall($params, $start, $count);
+
+        return $results;
+    }
+
+    private function createOptionsArray($genre, $area, $lat, $lng, $keyword, $start, $count)
+    {
+        return [
+            "genre" => $genre,
+            "area" => $area,
+            "lat" => $lat,
+            "lng" => $lng,
+            "keyword" => $keyword,
+            "start" => $start,
+            "count" => $count,
+        ];
+    }
+
+    private function handleAreaCode(array $params, ?string $area)
+    {
         if ($area !== null) {
             if (strpos($area, "Z0") !== false) {
                 $params["large_area"] = $area;
             } else {
                 $params["middle_area"] = $area;
-            }            
-        }
-        if ($lat !== null) {
-            ($lat < -90 || $lat > 90) ? throw new \InvalidArgumentException("Latitude value must be between -90 and 90") : $params["lat"] = $lat;
-        }
-        if ($lng !== null) {
-            ($lng < -180 || $lng > 180) ? throw new \InvalidArgumentException("Longitude value must be between -180 and 180") : $params["lng"] = $lng;
-        }
-        if ($keyword !== null) {
-            $params["keyword"] = $keyword;
-        }
-        if ($start !== 1) {
-            $params["start"] = $start;
-        }
-        if ($count !== 10) {
-            $params["count"] = $count;
+            }
         }
 
+        return $params;
+    }
+
+    private function validateParams(array $params)
+    {
         $input_keys = array_keys($params);
         foreach ($input_keys as $key) {
             if (empty($params[$key])) {
                 throw new \InvalidArgumentException($key . " parameter cannot be empty");
             }
         }
+    }
 
+    private function handleApiCall(array $params, int $start, int $count)
+    {
         $allResults = [];
         $totalCount = 0;
 
         do {
-            $response = $this->client->get("gourmet/v1/", [
-                "query" => $params,
-            ]);
+            $response = $this->getResponseFromApi($params);
 
-            if ($response->getStatusCode() === 200) {
-                $results = json_decode($response->getBody(), true)["results"];
-
-                if ($count === 100) {
-                    $results["results_available"] = $results["results_available"];
-                } else {
-                    $results["results_available"] = min($count, $results["results_available"]);
-                }
-
-                $totalCount = $results["results_available"];
-                $allResults = array_merge($allResults, $results["shop"]);
-                $count -= count($results["shop"]);
-                $start += count($results["shop"]);
-
-                $params["start"] = $start;
-            } else {
-                throw new \GuzzleHttp\Exception\GuzzleException("Request failed");
+            if ($response === null) {
+                throw new \UnexpectedValueException("Failed to retrieve results from API");
             }
+
+            $totalCount = $response["results_available"];
+            $allResults = array_merge($allResults, $response["shop"]);
+            $count -= count($response["shop"]);
+            $start += count($response["shop"]);
+
+            $params["start"] = $start;
         } while ($count > 0 && $start <= $totalCount);
 
         return [
@@ -113,10 +145,6 @@ class RecruitApiService
         ];
     }
 
-    /**
-     * 가게명으로 검색 메서드
-     * - 입력된 가게명을 사용하여 검색 결과 반환
-     */
     public function searchRestaurantsByName(string $name)
     {
         $params = [
@@ -149,9 +177,14 @@ class RecruitApiService
     }
 
     /**
-     * 사용자의 위치를 기반으로 한 주변 식당 검색 메서드
-     * - 위도, 경도에 기반하여 사용자 주변의 식당 검색이 가능
-     * - 검색 키워드 선택 가능
+     * ユーザーの位置情報を基にした周辺飲食店検索メソッド
+     * 緯度、経度に基づき、ユーザー周辺の飲食店検索が可能
+     * 検索キーワード選択可能
+     * @param float $latitude
+     * @param float $longitude
+     * @param float $range
+     * @param string|null $keyword
+     * @return array
      */
     public function searchRestaurantsByUserLocation(
         float $latitude,
@@ -191,9 +224,6 @@ class RecruitApiService
         return $results;
     }
 
-    /**
-     * 일치하는 장르의 인기 있는 가게를 가져오는 메서드
-     */
     public function getPopularRestaurantsByGenre(?string $genre = null)
     {
         if ($genre === null) {
@@ -206,7 +236,7 @@ class RecruitApiService
             "key" => env("HOTPEPPER_KEY"),
             "format" => "json",
             "genre" => $genre,
-            "order" => 4, // 인기순 정렬
+            "order" => 4,
         ];
 
         $results = $this->getResponseFromApi($params);
@@ -218,9 +248,6 @@ class RecruitApiService
         return $results;
     }
 
-    /**
-     * 가게 아이디로 가게 정보를 가져오는 메서드
-     */
     public function getRestaurantById(string $id)
     {
         $params = [
