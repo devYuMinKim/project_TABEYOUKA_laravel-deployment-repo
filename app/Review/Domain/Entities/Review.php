@@ -14,6 +14,7 @@ class Review extends Model
 
   protected $table = 'reviews';
   protected $primaryKey = 'id';
+  protected $with = ['reviewImages'];
   protected $fillable = [
     'id',
     'content',
@@ -33,10 +34,14 @@ class Review extends Model
 
   public function restaurants()
   {
-    return $this->belongsTo(Restaurant::class);
+    return $this->belongsTo(Restaurant::class, 'restaurant_id');
   }
 
   public function storyLists() {
     return $this->belongsToMany(StoryList::class);
+  }
+
+  public function reviewImages() {
+    return $this->hasMany(ReviewImages::class);
   }
 }

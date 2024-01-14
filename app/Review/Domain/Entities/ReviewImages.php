@@ -22,6 +22,6 @@ class ReviewImages extends Model
 
   public function reviews()
   {
-    return $this->belongsToMany(Review::class);
+    return $this->belongsTo(Review::class);
   }
 }
