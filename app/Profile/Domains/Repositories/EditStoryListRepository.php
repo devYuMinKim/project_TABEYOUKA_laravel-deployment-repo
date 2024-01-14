@@ -11,11 +11,13 @@ class EditStoryListRepository
   public function edit($data)
   {
     try {
-      $storyList = StoryList::findOrFail($data->id)->update(['story_name' => $data->story_name]);
+      $storyList = StoryList::findOrFail($data->id);
     } catch (ModelNotFoundException $e) {
       $errMsg = $e->getMessage();
       return response()->json(['error' => $errMsg]);
     }
+
+    $storyList->update(['story_name' => $data->story_name]);
 
     $storyList->reviews()->detach();
 
