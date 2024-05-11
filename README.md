@@ -1,94 +1,114 @@
-# ミノリginサーバーリポジトリ
+# 🍙 [食べようか]()
 
-## APIサーバーの機能
+<div align="center" style="display:flex;">
+    <img src="/profile/tabeyouka_logo.png" width="100" alt="logo"/>
+</div>
 
-このAPIサーバーは、クラス管理とオンライン教育のための複数の機能を提供します。主な機能は以下の通りです：
+> 福岡で食べようか！
 
-1. **出席情報関連機能**：
-  - 特定IDの出席情報の取得、削除、作成/更新。
-  - クラス別の全出席情報の取得。
+---
+<br>
 
-2. **Google認証**：
-  - Googleログイン後、ユーザー情報を受け取りトークン生成。
-  - ユーザーをGoogleログインページへリダイレクト。
+# 1. :grin: サービス紹介  
 
-3. **クラスボード（Class Board）**：
-  - 特定クラスの全ボードの取得、クラスボードの作成。
-  - 公告されたクラスボードの取得。
-  - 特定のクラスボードの詳細情報の取得、削除、更新。
+- [食べログ](https://tabelog.com/kr)の短所を補完するため、企画した日本のレストラン情報、レビューサービスです。
+- 詳しい内容は[wiki](https://github.com/Tabeyouka/project_TABEYOUKA_main-deployment-repo/wiki)にまとめております！
+---
+<br>
 
-4. **クラスコード（Class Code）**：
-  - 特定のクラスコードのシークレットの有無を確認。
-  - クラスコードとシークレットの検証、ユーザーに役割を割り当て。
+# 2. :two_men_holding_hands: チームメンバー紹介
+|                                         [キム・ユミン](https://github.com/yuminn-k)                                          |                                         [ジョ・ヒョンジュン](https://github.com/JOHYEONJUN39)                                          |                                         [キム・ヒョン](https://github.com/Hyn2)                                          |                                         [イ・ジュヒョン](https://github.com/d556f8)                                    
+| :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/55650732?v=4" width=400px alt="ユミン"/> | <img src="https://avatars.githubusercontent.com/u/93760720?v=4" width=400px alt="ヒョンジュン"/> | <img src="https://avatars.githubusercontent.com/u/125263770?v=4" width=400px alt="ヒョン"> | <img src="https://avatars.githubusercontent.com/u/64972038?v=4" width=400px alt="ジュヒョン"/> | 
+|                       Project Leader                        |                            Frontend                            |                            Full-Stack                            |                          Full-Stack                          
+---
+<br>
 
-5. **クラススケジュール（Class Schedule）**：
-  - 特定のクラスIDの全クラススケジュールの取得、新規作成。
-  - 特定の日付のクラススケジュールの取得。
-  - ライブ中のクラススケジュールの取得。
-  - 特定のクラススケジュールの詳細情報の取得、更新、削除。
+# 3. :computer: コア機能
+* レストランの情報を提供します。  
+    ![](https://github.com/Tabeyouka/project_TABEYOUKA_main-deployment-repo/assets/93760720/9fd07e37-504f-40d9-87a4-37d7b22086e1)  
+    * 食堂名, イメージ, 位置などを提供します。
+* レストランを検索することができます。  
+    ![](https://github.com/Tabeyouka/project_TABEYOUKA_main-deployment-repo/assets/93760720/89ec69f5-7667-4718-80e4-1a10eca2e1e2)  
+    * ユーザーの位置、ジャンルなどを通じて検索できます。
+* レストランのレビューを書くことができます。  
+    ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExenc3dzlkZDN3dDhuYWthYTdteDBnb20xd3g0cmV1dDZrNDhpeTJkaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4fpXMO7liO8oKhNAPo/giphy.gif)
+    * マイページで自分が書いたレビューを確認することができ、他のユーザーのレビューを確認することも可能です。
+    
+---
+<br>
 
-6. **クラス（Classes）**：
-  - 新しいクラスの作成（名前、定員数、説明、画像URLを含む）。
+# 4. :department_store: プロジェクト構造
+![structure](https://github.com/Tabeyouka/.github/assets/55650732/0cf282b4-555d-484c-8fe6-82a1016c77ba)
 
-7. **クラスユーザー（Class User）**：
-  - 特定ユーザーが参加している全クラスの情報取得。
-  - 特定ユーザーの名前の更新、ユーザー役割の変更。
+---
+<br>
 
-8. **ユーザー（User）**：
-  - ユーザーが申し込んだクラスの取得。
+# 5. :video_game: 技術スタック
+### フロントエンド
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
-また、プロジェクトでは`WebRTC`を通じた`リアルタイムの授業`、`Socket.io`を通じた`リアルタイムのチャット`機能、`クラス関連のCRUD`機能、管理者関連機能が追加予定です。
+### バックエンド
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 
-## ディレクトリ構造
+### 配布
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-```bash
-- project-root/
-  ├── constants/
-  │    └── 定数の定義
-  ├── controllers/
-  │    └── ユーザーのリクエスト処理とモデルの操作
-  ├── docs/
-  │    └── プロジェクトの文書化
-  ├── dto/
-  │    └── データ転送オブジェクトの定義
-  ├── middlewares/
-  │    └── 共通ミドルウェアロジック（認証、ログ記録など）
-  ├── migration/
-  │    └── データベーススキーマ管理
-  ├── models/
-  │    └── データモデルの定義
-  ├── repositories/
-  │    └── データベースとの相互作用の抽象化
-  ├── services/
-  │    └── ビジネスロジックの実装
-  └── utils/
-       └── ユーティリティ関数と共通コード
-```
+### コラボレーションツール
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![Gather](https://img.shields.io/badge/gather-%23007ACC.svg?style=for-the-badge&logo=ros&logoColor=white)
 
-## 適用されたデザインパターン
+<!--
+---
+<br>
 
-### MVC (Model-View-Controller)
-- モデル（Model）: /models
-  - データ関連のロジック処理。データベースのテーブルやデータ構造を表します。
-- コントローラー（Controller）: /controllers
-  - ユーザーからのAPIリクエストを受け取り、必要に応じてモデルを利用してデータを操作し、適切なレスポンスを生成します。
+# 6. :open_file_folder: 更新履歴
+-->
+<!--
+예시
+* 0.0.1
+    * 개발 환경 구축
+    * 칵테일 관련 도메인 구현
+    * 칵테일 다수 조회 구현
+* 0.0.2
+    * 로거 추가
+    * API 문서화
+    * 메타 / OG 태그 및 구글 애널리틱스 적용
+    * 검색 기능 구현
+* 0.0.3
+    * 관리자 페이지의 칵테일 수정과 삭제 기능 구현
+    * 칵테일 추천 방식을 개선
+* 0.0.4
+    * 유저 기능 추가 (구글 로그인)
+    * 칵테일 즐겨찾기 기능 추가
+    * 태그 검색 기능 추가
+    * 칵테일 추천 알고리즘 보완
+    * 카카오 공유 링크 추가
+    * 무한 스크롤링 개선
+* 0.0.5
+    * UX / UI 개선
+        * 로고 제작 및 추가
+        * 사용자 행동 유도 메시지 추가
+        * 사용자 행동 유도 모션 추가
+        * 무한 스크롤 방식을 더 보기 버튼으로 수정
+        * 푸터의 깃헙, 인스타그램 아이콘 클릭시 새 창이 열리도록 수정 
+    * 버그 수정
+        * 카카오 링크 개선
+        * 프론트 예외처리 추가
+        * 칵테일 태그 검색 비동기 버그 수정 
+-->
 
-### リポジトリパターン（Repository Pattern）
-- リポジトリ（Repository）: /repositories
-  - データベースとの相互作用をカプセル化し、データアクセスロジックとビジネスロジックを分離。データの取得、保存、更新などの処理を担当します。
+---
+<br>
 
-### サービスレイヤー（Service Layer）
-- サービス（Service）: /services
-  - ビジネスロジックを中心に処理。コントローラーとリポジトリの間の仲介者として機能し、ビジネスルールやデータ処理ロジックを担当します。
-
-### DTO（Data Transfer Object）
-- DTO: /dto
-  - APIリクエストやレスポンスでデータを転送する際に使用されるオブジェクト。必要なデータをカプセル化し、クライアントとサーバー間のデータ交換を効率化します。
-
-### ミドルウェアパターン（Middleware Pattern）
-- ミドルウェア（Middleware）: /middlewares
-  - リクエスト処理の前後で一般的なタスク（認証、ロギング、エラーハンドリングなど）を処理します。
-
-### ユーティリティ関数（Utility Functions）
-- ユーティリティ（Utilities）: /utils
-  - 再利用可能なヘルパー関数や一般的なユーティリティ機能を提供します。
+# 6. :pencil2: ご連絡に際しては
+- メール : gimyumin40@gmail.com
+- [ソースコードリポジトリ](https://github.com/Tabeyouka/project_TABEYOUKA_main-deployment-repo)
